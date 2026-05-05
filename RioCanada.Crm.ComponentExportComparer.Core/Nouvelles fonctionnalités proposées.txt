@@ -1,0 +1,59 @@
+﻿🚀 Nouvelles fonctionnalités proposées
+1. 📊 Rapport de comparaison HTML / Excel exportable
+Contexte : Actuellement le résultat est uniquement visuel dans l'UI (FormComparisionView, ComparisionDataView).
+Proposition :
+•	Ajouter un bouton "Exporter le rapport" dans FormComparisionView
+•	Générer un fichier .html ou .xlsx récapitulatif avec : composant, statut (Modified / Only in source / etc.), chemin, checksum
+•	Où : Nouveau ReportExporter.cs dans le projet Core, appelé depuis FormComparisionView.cs
+---
+2. 🔔 Comparaison planifiée (mode CLI / tâche planifiée)
+Contexte : Le Core est déjà indépendant de l'UI (ExportService, Exporter). Le README mentionne un mode CLI non finalisé.
+Proposition :
+•	Créer un 3e projet RioCanada.Crm.ComponentExportComparer.Cli (Console App .NET 4.8)
+•	Permettre d'exécuter une comparaison via ligne de commande et d'envoyer le résultat par email ou vers un fichier de log
+•	Intégrable dans une tâche Windows planifiée ou un pipeline CI/CD
+---
+3. 🏷️ Comparaison par tags / groupes de composants
+Contexte : ArgumentQueryRequest parse les requêtes en texte brut.
+Proposition :
+•	Permettre de nommer et grouper des ensembles de requêtes (ex: [Groupe: Entités Financières])
+•	Stocker ces groupes dans Queries comme objets structurés (QueryGroup { Name, Queries[] })
+•	Afficher les groupes dans FormQueryEditor avec des onglets ou un TreeView
+---
+4. 🔁 Historique des comparaisons
+Contexte : Les exports ZIP existent déjà mais il n'y a pas de traçabilité des comparaisons passées.
+Proposition :
+•	Maintenir un fichier history.json dans le répertoire de sortie
+•	Chaque entrée : date, source, cible, nombre de composants modifiés/ajoutés/supprimés
+•	Nouveau panel "Historique" dans MyPluginControl pour relancer ou visualiser une comparaison passée
+---
+5. 🧩 Support de nouveaux types de composants
+Contexte : ComponentType.cs contient déjà une liste exhaustive, mais certains types ne sont pas traités par l'Exporter.
+Proposition :
+•	Ajouter le support pour :
+•	MailMergeTemplate (type 39)
+•	EmailTemplate (type 36)
+•	DuplicateRule (type 44)
+•	ConnectionRole (type 63)
+•	Étendre DataTransformer.cs et Exporter.cs pour ces types
+---
+6. 🔍 Recherche / filtrage avancé dans les résultats
+Contexte : Il y a déjà un ComparisionStatusCheckboxFilter, mais le filtrage reste basique.
+Proposition :
+•	Ajouter une barre de recherche textuelle dans ComparisionView (filtre sur nom, chemin, type)
+•	Ajouter un filtre par type de composant (Table, WebResource, PluginStep…)
+•	Permettre le tri par colonne dans CustomDataGridView
+---
+7. 🛡️ Mode "diff sécurisé" — masquage des données sensibles
+Contexte : Certains exports peuvent contenir des URLs, des clés, des GUIDs d'environnement.
+Proposition :
+•	Ajouter une option dans SettingConfiguration : MaskSensitiveData
+•	Dans DataTransformer, remplacer les patterns sensibles (URLs d'orgs, GUIDs d'envs) par des tokens génériques avant la comparaison
+•	Utile pour partager des rapports sans exposer l'infrastructure
+---
+8. 📦 Synchronisation sélective (apply changes)
+Contexte : L'outil compare et exporte, mais n'agit pas sur les environnements.
+Proposition :
+•	Depuis la vue de comparaison, permettre de sélectionner des composants "Only in source" et de les exporter automatiquement vers la cible
+•	Ajouter un service SyncService.cs dans Core avec gestion des dépendances entre composants
+•	⚠️ Option avancée — nécessite une confirmation utilisateur forte

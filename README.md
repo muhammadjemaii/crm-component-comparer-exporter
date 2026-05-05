@@ -110,6 +110,140 @@ Table=contact,account,sale*;WebResource=contact.js
 - BusinessProcessFlow - Pattern should content display name of business process flow.
 - ModelDrivenApp - Pattern should content display name of model driven app.
 
+## Technical analysis summary
+
+### Solution structure
+
+The solution is organized into two .NET Framework 4.8 projects:
+
+- `RioCanada.Crm.ComponentExportComparer.Core`
+  - Core export and transformation logic
+  - Component query parsing and retrieval
+  - Index generation (`index.json`) for comparison support
+- `RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin`
+  - WinForms/XrmToolBox user interface
+  - Connection and settings management
+  - Export and compare workflow orchestration
+
+### Architecture overview
+
+- The **Core** project encapsulates CRM service access, metadata/component export, progress reporting, and deterministic data transformation (XML/JSON normalization).
+- The **Plugin** project focuses on UI interactions, persisted configuration, and execution control.
+- This split provides good separation of concerns and helps keep business logic reusable.
+
+### Key strengths
+
+- Clear layering between UI and domain logic.
+- Broad support for Dataverse/Dynamics components.
+- Progress tracking and logging for long-running operations.
+- ZIP + index-based flow enables repeatable offline comparisons.
+
+### Risks / technical debt observed
+
+- Legacy project format (non-SDK-style `.csproj` with `packages.config`).
+- Large dependency/reference surface in .NET Framework projects.
+- Some exception handling can be improved (e.g., prefer preserving original stack traces).
+- Naming inconsistency (`Comparision`) impacts readability and discoverability.
+- No automated test project detected in the current solution.
+
+### Recommended next steps
+
+1. Reliability pass
+   - Standardize exception handling and error propagation.
+2. Dependency hygiene
+   - Audit and remove unused packages/references.
+3. Add tests
+   - Start with unit tests around transformation and export preparation logic.
+4. Incremental modernization
+   - Convert to SDK-style while staying on `net48` first, then evaluate migration to modern .NET.
+
+---
+
+## Build Fixes & Maintenance Log
+
+### [Fix] Migrate `XrmToolBoxPlugin` from `packages.config` to `PackageReference`
+
+**Date:** 2025  
+**Branch:** `dev-commun`  
+**Affected project:** `RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin`
+
+#### Problem
+
+The build was failing with the following error:
+
+```
+C:\...\.nuget\packages\microsoft.windows.sdk.contracts\10.0.28000.1839\build\Microsoft.Windows.SDK.Contracts.targets(4,5):
+error : Must use PackageReference
+```
+
+Certain NuGet packages — notably `Microsoft.Web.WebView2` and `ILMerge` — ship MSBuild `.targets`/`.props` files that **require** the modern `PackageReference` format. Using the legacy `packages.config` format causes these packages to fail the build explicitly.
+
+Additional warnings were also present:
+
+| Warning | Location | Description |
+|---------|----------|-------------|
+| CS0168 | `ExportService.cs` (line 107) | Variable `ex` declared but never used |
+| CS0168 | `FormFileViewer.cs` (line 431) | Variable `ex` declared but never used |
+| CS0169 | `FormFileViewer.Designer.cs` (line 250) | Field `toolStripMenuItem1` never used |
+| Assembly conflict | `app.config` | `Microsoft.IdentityModel.Clients.ActiveDirectory` version mismatch (5.2.9 → 5.3.0) |
+
+#### Solution Applied
+
+The `XrmToolBoxPlugin` project was migrated from `packages.config` to `PackageReference` format:
+
+1. **Removed** the legacy `ILMerge.props` `<Import>` from the top of the `.csproj`.
+2. **Replaced** all 31 `<Reference>` elements that had `<HintPath>` entries pointing to `..\packages\` with equivalent `<PackageReference>` elements (same package IDs and versions).
+3. **Removed** the `<None Include="packages.config" />` entry from the `.csproj`.
+4. **Removed** the old `Microsoft.Web.WebView2.targets` `<Import>` (now auto-injected by NuGet via `PackageReference`).
+5. **Removed** the `EnsureNuGetPackageBuildImports` validation target (no longer needed).
+6. **Deleted** the `packages.config` file from the project directory.
+
+#### Packages migrated (31 total)
+
+| Package | Version |
+|---------|---------|
+| DockPanelSuite | 3.0.6 |
+| DockPanelSuite.ThemeVS2015 | 3.0.6 |
+| ILMerge | 3.0.41 |
+| jacobslusser.ScintillaNET | 3.6.3 |
+| Menees.Common | 5.1.2 |
+| Menees.Diffs | 5.1.2 |
+| Menees.Diffs.Windows.Forms | 5.1.2 |
+| Menees.Windows | 5.1.2 |
+| Menees.Windows.Forms | 5.1.2 |
+| Microsoft.CrmSdk.CoreAssemblies | 9.0.2.49 |
+| Microsoft.CrmSdk.Deployment | 9.0.2.34 |
+| Microsoft.CrmSdk.Workflow | 9.0.2.49 |
+| Microsoft.CrmSdk.XrmTooling.CoreAssembly | 9.1.1.32 |
+| Microsoft.CrmSdk.XrmTooling.WpfControls | 9.1.1.32 |
+| Microsoft.CSharp | 4.7.0 |
+| Microsoft.IdentityModel | 7.0.0 |
+| Microsoft.IdentityModel.Clients.ActiveDirectory | 5.2.9 |
+| Microsoft.Web.WebView2 | 1.0.1343.22 |
+| Microsoft.Web.Xdt | 3.1.0 |
+| MscrmTools.Xrm.Connection | 1.2023.6.56 |
+| Newtonsoft.Json | 13.0.1 |
+| System.IO.Compression.ZipFile | 4.3.0 |
+| System.Net.Http | 4.3.4 |
+| System.Private.Uri | 4.3.2 |
+| System.Security.Cryptography.Algorithms | 4.3.1 |
+| System.Security.Cryptography.Cng | 5.0.0 |
+| System.Security.Cryptography.Encoding | 4.3.0 |
+| System.Security.Cryptography.Pkcs | 5.0.1 |
+| System.Security.Cryptography.Primitives | 4.3.0 |
+| System.Security.Cryptography.X509Certificates | 4.3.2 |
+| XrmToolBoxPackage | 1.2023.10.67 |
+
+#### Result
+
+Build succeeded for both projects (`Release Any CPU`).
+
+> **Note:** The `Core` project still uses `packages.config`. It should be migrated in the same manner if it ever pulls in packages that require `PackageReference`.
+
+### Scope of this analysis
+
+This summary is based on repository structure and key implementation files in the current workspace.
+
 <!--
 ### Additional settings
 
