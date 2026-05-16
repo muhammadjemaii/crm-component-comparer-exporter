@@ -32,7 +32,6 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxSolution = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBoxModelDrivenApp = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -56,6 +55,19 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label12 = new System.Windows.Forms.Label();
             this.textBoxAction = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.textBoxModelDrivenApp = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBoxEmailTemplate = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBoxMailMergeTemplate = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBoxDuplicateRule = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBoxConnectionRole = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textBoxReport = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBoxCanvasApp = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonReset = new System.Windows.Forms.Button();
@@ -69,6 +81,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxSolution.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.textBoxSolution.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxSolution.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxSolution.ForeColor = System.Drawing.Color.Empty;
             this.textBoxSolution.Location = new System.Drawing.Point(159, 3);
             this.textBoxSolution.Name = "textBoxSolution";
             this.textBoxSolution.PlaceHolder = "";
@@ -83,7 +96,6 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel1.Controls.Add(this.label13, 0, 12);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxModelDrivenApp, 0, 12);
             this.tableLayoutPanel1.Controls.Add(this.label6, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.label5, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
@@ -108,9 +120,22 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.tableLayoutPanel1.Controls.Add(this.label12, 0, 11);
             this.tableLayoutPanel1.Controls.Add(this.textBoxAction, 1, 10);
             this.tableLayoutPanel1.Controls.Add(this.label11, 0, 10);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxModelDrivenApp, 1, 12);
+            this.tableLayoutPanel1.Controls.Add(this.label14, 0, 13);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxEmailTemplate, 1, 13);
+            this.tableLayoutPanel1.Controls.Add(this.label15, 0, 14);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxMailMergeTemplate, 1, 14);
+            this.tableLayoutPanel1.Controls.Add(this.label16, 0, 15);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxDuplicateRule, 1, 15);
+            this.tableLayoutPanel1.Controls.Add(this.label17, 0, 16);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxConnectionRole, 1, 16);
+            this.tableLayoutPanel1.Controls.Add(this.label18, 0, 17);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxReport, 1, 17);
+            this.tableLayoutPanel1.Controls.Add(this.label19, 0, 18);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxCanvasApp, 1, 18);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 13);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 13;
+            this.tableLayoutPanel1.RowCount = 19;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -124,7 +149,13 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(522, 473);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(522, 700);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // label13
@@ -132,27 +163,16 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(3, 420);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(113, 19);
+            this.label13.Size = new System.Drawing.Size(107, 17);
             this.label13.TabIndex = 25;
             this.label13.Text = "ModelDrivenApp";
-            // 
-            // textBoxModelDrivenApp
-            // 
-            this.textBoxModelDrivenApp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxModelDrivenApp.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
-            this.textBoxModelDrivenApp.Location = new System.Drawing.Point(159, 423);
-            this.textBoxModelDrivenApp.Name = "textBoxModelDrivenApp";
-            this.textBoxModelDrivenApp.PlaceHolder = "";
-            this.textBoxModelDrivenApp.Size = new System.Drawing.Size(360, 25);
-            this.textBoxModelDrivenApp.TabIndex = 24;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(3, 175);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(76, 19);
+            this.label6.Size = new System.Drawing.Size(73, 17);
             this.label6.TabIndex = 10;
             this.label6.Text = "Dashboard";
             // 
@@ -161,7 +181,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(3, 140);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(50, 19);
+            this.label5.Size = new System.Drawing.Size(47, 17);
             this.label5.TabIndex = 8;
             this.label5.Text = "Choice";
             // 
@@ -170,7 +190,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(3, 105);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 19);
+            this.label4.Size = new System.Drawing.Size(69, 17);
             this.label4.TabIndex = 5;
             this.label4.Text = "PluginStep";
             // 
@@ -179,6 +199,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxEntity.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxEntity.ForeColor = System.Drawing.Color.Empty;
             this.textBoxEntity.Location = new System.Drawing.Point(159, 38);
             this.textBoxEntity.Name = "textBoxEntity";
             this.textBoxEntity.PlaceHolder = "";
@@ -190,7 +211,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 35);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(39, 19);
+            this.label2.Size = new System.Drawing.Size(39, 17);
             this.label2.TabIndex = 2;
             this.label2.Text = "Table";
             // 
@@ -199,7 +220,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 19);
+            this.label1.Size = new System.Drawing.Size(55, 17);
             this.label1.TabIndex = 1;
             this.label1.Text = "Solution";
             // 
@@ -208,7 +229,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(3, 70);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(91, 19);
+            this.label3.Size = new System.Drawing.Size(88, 17);
             this.label3.TabIndex = 4;
             this.label3.Text = "WebResource";
             // 
@@ -217,6 +238,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxWebresource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxWebresource.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxWebresource.ForeColor = System.Drawing.Color.Empty;
             this.textBoxWebresource.Location = new System.Drawing.Point(159, 73);
             this.textBoxWebresource.Name = "textBoxWebresource";
             this.textBoxWebresource.PlaceHolder = "";
@@ -227,11 +249,12 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             // 
             this.textBoxPluginstep.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPluginstep.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxPluginstep.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.6F, System.Drawing.FontStyle.Italic);
+            this.textBoxPluginstep.ForeColor = System.Drawing.Color.Empty;
             this.textBoxPluginstep.Location = new System.Drawing.Point(159, 108);
             this.textBoxPluginstep.Name = "textBoxPluginstep";
             this.textBoxPluginstep.PlaceHolder = "";
-            this.textBoxPluginstep.Size = new System.Drawing.Size(360, 25);
+            this.textBoxPluginstep.Size = new System.Drawing.Size(360, 20);
             this.textBoxPluginstep.TabIndex = 7;
             // 
             // textBoxOptionSet
@@ -239,6 +262,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxOptionSet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOptionSet.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxOptionSet.ForeColor = System.Drawing.Color.Empty;
             this.textBoxOptionSet.Location = new System.Drawing.Point(159, 143);
             this.textBoxOptionSet.Name = "textBoxOptionSet";
             this.textBoxOptionSet.PlaceHolder = "";
@@ -250,6 +274,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxDashboard.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxDashboard.ForeColor = System.Drawing.Color.Empty;
             this.textBoxDashboard.Location = new System.Drawing.Point(159, 178);
             this.textBoxDashboard.Name = "textBoxDashboard";
             this.textBoxDashboard.PlaceHolder = "";
@@ -261,6 +286,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxSiteMap.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxSiteMap.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxSiteMap.ForeColor = System.Drawing.Color.Empty;
             this.textBoxSiteMap.Location = new System.Drawing.Point(159, 213);
             this.textBoxSiteMap.Name = "textBoxSiteMap";
             this.textBoxSiteMap.PlaceHolder = "";
@@ -272,7 +298,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(3, 210);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(59, 19);
+            this.label7.Size = new System.Drawing.Size(56, 17);
             this.label7.TabIndex = 13;
             this.label7.Text = "SiteMap";
             // 
@@ -281,6 +307,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxSecurityRole.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxSecurityRole.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxSecurityRole.ForeColor = System.Drawing.Color.Empty;
             this.textBoxSecurityRole.Location = new System.Drawing.Point(159, 248);
             this.textBoxSecurityRole.Name = "textBoxSecurityRole";
             this.textBoxSecurityRole.PlaceHolder = "";
@@ -292,7 +319,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(3, 245);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(83, 19);
+            this.label8.Size = new System.Drawing.Size(79, 17);
             this.label8.TabIndex = 15;
             this.label8.Text = "SecurityRole";
             // 
@@ -301,6 +328,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxBusinessRule.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxBusinessRule.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxBusinessRule.ForeColor = System.Drawing.Color.Empty;
             this.textBoxBusinessRule.Location = new System.Drawing.Point(159, 318);
             this.textBoxBusinessRule.Name = "textBoxBusinessRule";
             this.textBoxBusinessRule.PlaceHolder = "";
@@ -312,7 +340,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(3, 315);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(87, 19);
+            this.label10.Size = new System.Drawing.Size(82, 17);
             this.label10.TabIndex = 19;
             this.label10.Text = "BusinessRule";
             // 
@@ -321,6 +349,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxWorkflow.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxWorkflow.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxWorkflow.ForeColor = System.Drawing.Color.Empty;
             this.textBoxWorkflow.Location = new System.Drawing.Point(159, 283);
             this.textBoxWorkflow.Name = "textBoxWorkflow";
             this.textBoxWorkflow.PlaceHolder = "";
@@ -332,7 +361,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(3, 280);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(66, 19);
+            this.label9.Size = new System.Drawing.Size(62, 17);
             this.label9.TabIndex = 17;
             this.label9.Text = "Workflow";
             // 
@@ -341,6 +370,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxBusinessProcessFlow.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxBusinessProcessFlow.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxBusinessProcessFlow.ForeColor = System.Drawing.Color.Empty;
             this.textBoxBusinessProcessFlow.Location = new System.Drawing.Point(159, 388);
             this.textBoxBusinessProcessFlow.Name = "textBoxBusinessProcessFlow";
             this.textBoxBusinessProcessFlow.PlaceHolder = "";
@@ -352,7 +382,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(3, 385);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(135, 19);
+            this.label12.Size = new System.Drawing.Size(128, 17);
             this.label12.TabIndex = 23;
             this.label12.Text = "BusinessProcessFlow";
             // 
@@ -361,6 +391,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxAction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxAction.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxAction.ForeColor = System.Drawing.Color.Empty;
             this.textBoxAction.Location = new System.Drawing.Point(159, 353);
             this.textBoxAction.Name = "textBoxAction";
             this.textBoxAction.PlaceHolder = "";
@@ -372,14 +403,134 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(3, 350);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(48, 19);
+            this.label11.Size = new System.Drawing.Size(44, 17);
             this.label11.TabIndex = 21;
             this.label11.Text = "Action";
+            // 
+            // textBoxModelDrivenApp
+            // 
+            this.textBoxModelDrivenApp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxModelDrivenApp.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxModelDrivenApp.ForeColor = System.Drawing.Color.Empty;
+            this.textBoxModelDrivenApp.Location = new System.Drawing.Point(159, 423);
+            this.textBoxModelDrivenApp.Name = "textBoxModelDrivenApp";
+            this.textBoxModelDrivenApp.PlaceHolder = "";
+            this.textBoxModelDrivenApp.Size = new System.Drawing.Size(360, 25);
+            this.textBoxModelDrivenApp.TabIndex = 24;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Name = "label14";
+            this.label14.TabIndex = 26;
+            this.label14.Text = "EmailTemplate";
+            // 
+            // textBoxEmailTemplate
+            // 
+            this.textBoxEmailTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxEmailTemplate.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxEmailTemplate.ForeColor = System.Drawing.Color.Empty;
+            this.textBoxEmailTemplate.Name = "textBoxEmailTemplate";
+            this.textBoxEmailTemplate.PlaceHolder = "";
+            this.textBoxEmailTemplate.Size = new System.Drawing.Size(360, 25);
+            this.textBoxEmailTemplate.TabIndex = 27;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Name = "label15";
+            this.label15.TabIndex = 28;
+            this.label15.Text = "MailMergeTemplate";
+            // 
+            // textBoxMailMergeTemplate
+            // 
+            this.textBoxMailMergeTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxMailMergeTemplate.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxMailMergeTemplate.ForeColor = System.Drawing.Color.Empty;
+            this.textBoxMailMergeTemplate.Name = "textBoxMailMergeTemplate";
+            this.textBoxMailMergeTemplate.PlaceHolder = "";
+            this.textBoxMailMergeTemplate.Size = new System.Drawing.Size(360, 25);
+            this.textBoxMailMergeTemplate.TabIndex = 29;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Name = "label16";
+            this.label16.TabIndex = 30;
+            this.label16.Text = "DuplicateRule";
+            // 
+            // textBoxDuplicateRule
+            // 
+            this.textBoxDuplicateRule.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDuplicateRule.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxDuplicateRule.ForeColor = System.Drawing.Color.Empty;
+            this.textBoxDuplicateRule.Name = "textBoxDuplicateRule";
+            this.textBoxDuplicateRule.PlaceHolder = "";
+            this.textBoxDuplicateRule.Size = new System.Drawing.Size(360, 25);
+            this.textBoxDuplicateRule.TabIndex = 31;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Name = "label17";
+            this.label17.TabIndex = 32;
+            this.label17.Text = "ConnectionRole";
+            // 
+            // textBoxConnectionRole
+            // 
+            this.textBoxConnectionRole.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxConnectionRole.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxConnectionRole.ForeColor = System.Drawing.Color.Empty;
+            this.textBoxConnectionRole.Name = "textBoxConnectionRole";
+            this.textBoxConnectionRole.PlaceHolder = "";
+            this.textBoxConnectionRole.Size = new System.Drawing.Size(360, 25);
+            this.textBoxConnectionRole.TabIndex = 33;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Name = "label18";
+            this.label18.TabIndex = 34;
+            this.label18.Text = "Report";
+            // 
+            // textBoxReport
+            // 
+            this.textBoxReport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxReport.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxReport.ForeColor = System.Drawing.Color.Empty;
+            this.textBoxReport.Name = "textBoxReport";
+            this.textBoxReport.PlaceHolder = "";
+            this.textBoxReport.Size = new System.Drawing.Size(360, 25);
+            this.textBoxReport.TabIndex = 35;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Name = "label19";
+            this.label19.TabIndex = 36;
+            this.label19.Text = "CanvasApp";
+            // 
+            // textBoxCanvasApp
+            // 
+            this.textBoxCanvasApp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxCanvasApp.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxCanvasApp.ForeColor = System.Drawing.Color.Empty;
+            this.textBoxCanvasApp.Name = "textBoxCanvasApp";
+            this.textBoxCanvasApp.PlaceHolder = "";
+            this.textBoxCanvasApp.Size = new System.Drawing.Size(360, 25);
+            this.textBoxCanvasApp.TabIndex = 37;
             // 
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(393, 518);
+            this.buttonOk.Location = new System.Drawing.Point(393, 728);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(66, 27);
             this.buttonOk.TabIndex = 2;
@@ -391,7 +542,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(464, 518);
+            this.buttonCancel.Location = new System.Drawing.Point(464, 728);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(66, 27);
             this.buttonCancel.TabIndex = 3;
@@ -401,7 +552,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             // buttonReset
             // 
             this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonReset.Location = new System.Drawing.Point(10, 518);
+            this.buttonReset.Location = new System.Drawing.Point(10, 728);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(66, 27);
             this.buttonReset.TabIndex = 4;
@@ -414,7 +565,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(542, 555);
+            this.ClientSize = new System.Drawing.Size(542, 765);
             this.Controls.Add(this.buttonReset);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
@@ -468,5 +619,17 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
         private System.Windows.Forms.Label label13;
         private CustomTextBox textBoxModelDrivenApp;
         private System.Windows.Forms.Button buttonReset;
+        private System.Windows.Forms.Label label14;
+        private CustomTextBox textBoxEmailTemplate;
+        private System.Windows.Forms.Label label15;
+        private CustomTextBox textBoxMailMergeTemplate;
+        private System.Windows.Forms.Label label16;
+        private CustomTextBox textBoxDuplicateRule;
+        private System.Windows.Forms.Label label17;
+        private CustomTextBox textBoxConnectionRole;
+        private System.Windows.Forms.Label label18;
+        private CustomTextBox textBoxReport;
+        private System.Windows.Forms.Label label19;
+        private CustomTextBox textBoxCanvasApp;
     }
 }

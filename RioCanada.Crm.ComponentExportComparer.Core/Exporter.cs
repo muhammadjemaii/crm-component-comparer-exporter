@@ -39,6 +39,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
         readonly int ActionWeight = 1;
         readonly int BusinessProcessFlowWeight = 1;
         readonly int ModelDrivenAppWeight = 1;
+        readonly int EmailTemplateWeight = 1;
+        readonly int MailMergeTemplateWeight = 1;
+        readonly int DuplicateRuleWeight = 1;
+        readonly int ConnectionRoleWeight = 1;
+        readonly int ReportWeight = 1;
+        readonly int CanvasAppWeight = 1;
 
         //readonly int ENTITY_BUFFER_SIZE = 5;
         readonly int WEBRESOURCE_BUFFER_SIZE = 50;
@@ -48,6 +54,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
         readonly int SECURITY_ROLE_BUFFER_SIZE = 10;
         readonly int WORKFLOW_BUFFER_SIZE = 50;
         readonly int MODEL_DRIVEN_APP_BUFFER_SIZE = 10;
+        readonly int EMAIL_TEMPLATE_BUFFER_SIZE = 50;
+        readonly int MAIL_MERGE_TEMPLATE_BUFFER_SIZE = 50;
+        readonly int DUPLICATE_RULE_BUFFER_SIZE = 50;
+        readonly int CONNECTION_ROLE_BUFFER_SIZE = 50;
+        readonly int REPORT_BUFFER_SIZE = 10;
+        readonly int CANVAS_APP_BUFFER_SIZE = 10;
 
         bool IncludeAllProperty { get => this.Setting.IncludeAllProperty; }
         bool ReplaceEmptyStringByNull  { get => this.Setting.ReplaceEmptyStringByNull; }
@@ -99,6 +111,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
                 + argumentQueryResponse.Actions.Count * ActionWeight
                 + argumentQueryResponse.BusinessProcessFlows.Count * BusinessProcessFlowWeight
                 + argumentQueryResponse.ModelDrivenApps.Count * ModelDrivenAppWeight
+                + argumentQueryResponse.EmailTemplates.Count * EmailTemplateWeight
+                + argumentQueryResponse.MailMergeTemplates.Count * MailMergeTemplateWeight
+                + argumentQueryResponse.DuplicateRules.Count * DuplicateRuleWeight
+                + argumentQueryResponse.ConnectionRoles.Count * ConnectionRoleWeight
+                + argumentQueryResponse.Reports.Count * ReportWeight
+                + argumentQueryResponse.CanvasApps.Count * CanvasAppWeight
                 ;
         }
 
@@ -118,6 +136,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
             this.ExportAction(ArgumentQueryResponse.Actions, ActionWeight); // Actions
             this.ExportBusinessProcessFlow(ArgumentQueryResponse.BusinessProcessFlows, BusinessProcessFlowWeight); // Business Process Flows
             this.ExportModelDrivenApp(ArgumentQueryResponse.ModelDrivenApps, ModelDrivenAppWeight); // Model Driven Apps
+            this.ExportEmailTemplate(ArgumentQueryResponse.EmailTemplates, EmailTemplateWeight); // Email Templates
+            this.ExportMailMergeTemplate(ArgumentQueryResponse.MailMergeTemplates, MailMergeTemplateWeight); // Mail Merge Templates
+            this.ExportDuplicateRule(ArgumentQueryResponse.DuplicateRules, DuplicateRuleWeight); // Duplicate Rules
+            this.ExportConnectionRole(ArgumentQueryResponse.ConnectionRoles, ConnectionRoleWeight); // Connection Roles
+            this.ExportReport(ArgumentQueryResponse.Reports, ReportWeight); // Reports
+            this.ExportCanvasApp(ArgumentQueryResponse.CanvasApps, CanvasAppWeight); // Canvas Apps
 
             if (BgWorker?.CancellationPending == true) return;
 
@@ -974,6 +998,267 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
                         null,
                         currentIndexItem.Children,
                         new IndexLineItem { Key = "descriptor.json", Name = "descriptor.json", Type = IndexItemType.FileJson }
+                    );
+                }
+
+                CurrentCompleted += ids.Count;
+                OverallCompleted += ids.Count * weight;
+                SendProgressSnapshot();
+            }
+        }
+
+        void ExportEmailTemplate(List<EmailTemplate> items, int weight)
+        {
+            if (BgWorker?.CancellationPending == true) return;
+            if (items.Count == 0) return;
+
+            CurrentCompleted = 0;
+            CurrentTotal = items.Count;
+            CurrentLabel = "Exporting email templates...";
+            var indexItem = AddIndexItem(IndexData, new IndexLineItem { Key = "emailtemplates", Name = "Email Templates", Type = IndexItemType.Folder, Order = 13, Children = new List<IndexLineItem>() });
+
+            SendProgressSnapshot();
+            int bufferSize = EMAIL_TEMPLATE_BUFFER_SIZE;
+            for (var i = 0; i < items.Count; i += bufferSize)
+            {
+                if (BgWorker?.CancellationPending == true) return;
+                var ids = items.Select(x => x.Id).Skip(i).Take(bufferSize).ToList();
+                var templates = this.Service.GetData<EmailTemplate>(EmailTemplate.EntityLogicalName, ids);
+
+                foreach (var template in templates)
+                {
+                    var currentIndexItem = AddIndexItem(indexItem.Children, new IndexLineItem { Key = template.Id.ToString(), Name = template.Title, Type = IndexItemType.Folder, Children = new List<IndexLineItem>() });
+                    currentIndexItem.Metadata.Add("Type", "EmailTemplate");
+                    currentIndexItem.Metadata.Add("Id", template.Id.ToString());
+
+                    HandleOutFile(
+                        $@"emailtemplates\{template.Id}\metadata.json",
+                        SerializeUtility.SerializeJson(template.GetMetadataObject(IncludeAllProperty)),
+                        null,
+                        currentIndexItem.Children,
+                        new IndexLineItem { Key = "metadata.json", Name = "metadata.json", Type = IndexItemType.FileJson }
+                    );
+                    HandleOutFile(
+                        $@"emailtemplates\{template.Id}\body.xml",
+                        DataTransformer.TransformXml(template.Body),
+                        null,
+                        currentIndexItem.Children,
+                        new IndexLineItem { Key = "body.xml", Name = "body.xml", Type = IndexItemType.FileXml }
+                    );
+                    HandleOutFile(
+                        $@"emailtemplates\{template.Id}\presentationxml.xml",
+                        DataTransformer.TransformXml(template.PresentationXml),
+                        null,
+                        currentIndexItem.Children,
+                        new IndexLineItem { Key = "presentationxml.xml", Name = "presentationxml.xml", Type = IndexItemType.FileXml }
+                    );
+                }
+
+                CurrentCompleted += ids.Count;
+                OverallCompleted += ids.Count * weight;
+                SendProgressSnapshot();
+            }
+        }
+
+        void ExportMailMergeTemplate(List<MailMergeTemplate> items, int weight)
+        {
+            if (BgWorker?.CancellationPending == true) return;
+            if (items.Count == 0) return;
+
+            CurrentCompleted = 0;
+            CurrentTotal = items.Count;
+            CurrentLabel = "Exporting mail merge templates...";
+            var indexItem = AddIndexItem(IndexData, new IndexLineItem { Key = "mailmergetemplates", Name = "Mail Merge Templates", Type = IndexItemType.Folder, Order = 14, Children = new List<IndexLineItem>() });
+
+            SendProgressSnapshot();
+            int bufferSize = MAIL_MERGE_TEMPLATE_BUFFER_SIZE;
+            for (var i = 0; i < items.Count; i += bufferSize)
+            {
+                if (BgWorker?.CancellationPending == true) return;
+                var ids = items.Select(x => x.Id).Skip(i).Take(bufferSize).ToList();
+                var templates = this.Service.GetData<MailMergeTemplate>(MailMergeTemplate.EntityLogicalName, ids);
+
+                foreach (var template in templates)
+                {
+                    var currentIndexItem = AddIndexItem(indexItem.Children, new IndexLineItem { Key = template.Id.ToString(), Name = template.Name, Type = IndexItemType.Folder, Children = new List<IndexLineItem>() });
+                    currentIndexItem.Metadata.Add("Type", "MailMergeTemplate");
+                    currentIndexItem.Metadata.Add("Id", template.Id.ToString());
+
+                    HandleOutFile(
+                        $@"mailmergetemplates\{template.Id}\metadata.json",
+                        SerializeUtility.SerializeJson(template.GetMetadataObject(IncludeAllProperty)),
+                        null,
+                        currentIndexItem.Children,
+                        new IndexLineItem { Key = "metadata.json", Name = "metadata.json", Type = IndexItemType.FileJson }
+                    );
+                }
+
+                CurrentCompleted += ids.Count;
+                OverallCompleted += ids.Count * weight;
+                SendProgressSnapshot();
+            }
+        }
+
+        void ExportDuplicateRule(List<DuplicateRule> items, int weight)
+        {
+            if (BgWorker?.CancellationPending == true) return;
+            if (items.Count == 0) return;
+
+            CurrentCompleted = 0;
+            CurrentTotal = items.Count;
+            CurrentLabel = "Exporting duplicate rules...";
+            var indexItem = AddIndexItem(IndexData, new IndexLineItem { Key = "duplicaterules", Name = "Duplicate Rules", Type = IndexItemType.Folder, Order = 15, Children = new List<IndexLineItem>() });
+
+            SendProgressSnapshot();
+            int bufferSize = DUPLICATE_RULE_BUFFER_SIZE;
+            for (var i = 0; i < items.Count; i += bufferSize)
+            {
+                if (BgWorker?.CancellationPending == true) return;
+                var ids = items.Select(x => x.Id).Skip(i).Take(bufferSize).ToList();
+                var rules = this.Service.GetData<DuplicateRule>(DuplicateRule.EntityLogicalName, ids);
+
+                foreach (var rule in rules)
+                {
+                    HandleOutFile(
+                        $@"duplicaterules\{rule.Id}.metadata.json",
+                        SerializeUtility.SerializeJson(rule.GetMetadataObject(IncludeAllProperty)),
+                        null,
+                        indexItem.Children,
+                        new IndexLineItem { Key = $"{rule.Id}.metadata.json", Name = rule.Name, Type = IndexItemType.FileJson }
+                    );
+                }
+
+                CurrentCompleted += ids.Count;
+                OverallCompleted += ids.Count * weight;
+                SendProgressSnapshot();
+            }
+        }
+
+        void ExportConnectionRole(List<ConnectionRole> items, int weight)
+        {
+            if (BgWorker?.CancellationPending == true) return;
+            if (items.Count == 0) return;
+
+            CurrentCompleted = 0;
+            CurrentTotal = items.Count;
+            CurrentLabel = "Exporting connection roles...";
+            var indexItem = AddIndexItem(IndexData, new IndexLineItem { Key = "connectionroles", Name = "Connection Roles", Type = IndexItemType.Folder, Order = 16, Children = new List<IndexLineItem>() });
+
+            SendProgressSnapshot();
+            int bufferSize = CONNECTION_ROLE_BUFFER_SIZE;
+            for (var i = 0; i < items.Count; i += bufferSize)
+            {
+                if (BgWorker?.CancellationPending == true) return;
+                var ids = items.Select(x => x.Id).Skip(i).Take(bufferSize).ToList();
+                var roles = this.Service.GetData<ConnectionRole>(ConnectionRole.EntityLogicalName, ids);
+
+                foreach (var role in roles)
+                {
+                    HandleOutFile(
+                        $@"connectionroles\{role.Id}.metadata.json",
+                        SerializeUtility.SerializeJson(role.GetMetadataObject(IncludeAllProperty)),
+                        null,
+                        indexItem.Children,
+                        new IndexLineItem { Key = $"{role.Id}.metadata.json", Name = role.Name, Type = IndexItemType.FileJson }
+                    );
+                }
+
+                CurrentCompleted += ids.Count;
+                OverallCompleted += ids.Count * weight;
+                SendProgressSnapshot();
+            }
+        }
+
+        void ExportReport(List<Models.Report> items, int weight)
+        {
+            if (BgWorker?.CancellationPending == true) return;
+            if (items.Count == 0) return;
+
+            CurrentCompleted = 0;
+            CurrentTotal = items.Count;
+            CurrentLabel = "Exporting reports...";
+            var indexItem = AddIndexItem(IndexData, new IndexLineItem { Key = "reports", Name = "Reports", Type = IndexItemType.Folder, Order = 17, Children = new List<IndexLineItem>() });
+
+            SendProgressSnapshot();
+            int bufferSize = REPORT_BUFFER_SIZE;
+            for (var i = 0; i < items.Count; i += bufferSize)
+            {
+                if (BgWorker?.CancellationPending == true) return;
+                var ids = items.Select(x => x.Id).Skip(i).Take(bufferSize).ToList();
+                var reports = this.Service.GetData<Models.Report>(Models.Report.EntityLogicalName, ids);
+
+                foreach (var record in reports)
+                {
+                    var metadata = new Dictionary<string, object>
+                    {
+                        { "Type", "Report" },
+                        { "Id", record.Id.ToString() }
+                    };
+
+                    HandleOutFile(
+                        $@"reports\{record.Id}.metadata.json",
+                        SerializeUtility.SerializeJson(record.GetMetadataObject(IncludeAllProperty)),
+                        null,
+                        indexItem.Children,
+                        new IndexLineItem { Key = $"{record.Id}.metadata.json", Name = record.Name, Type = IndexItemType.FileJson, Metadata = metadata }
+                    );
+
+                    if (!string.IsNullOrEmpty(record.BodyText))
+                    {
+                        var fileName = !string.IsNullOrWhiteSpace(record.FileName) ? record.FileName : $"{record.Id}.rdl";
+                        HandleOutFile(
+                            $@"reports\{record.Id}\{fileName}",
+                            null,
+                            System.Text.Encoding.UTF8.GetBytes(record.BodyText),
+                            indexItem.Children,
+                            new IndexLineItem { Key = fileName, Name = fileName, Type = IndexItemType.File, ContentType = IndexLineItemContentType.Report, Metadata = metadata }
+                        );
+                    }
+                }
+
+                CurrentCompleted += ids.Count;
+                OverallCompleted += ids.Count * weight;
+                SendProgressSnapshot();
+            }
+        }
+
+        void ExportCanvasApp(List<Models.CanvasApp> items, int weight)
+        {
+            if (BgWorker?.CancellationPending == true) return;
+            if (items.Count == 0) return;
+
+            CurrentCompleted = 0;
+            CurrentTotal = items.Count;
+            CurrentLabel = "Exporting canvas apps...";
+            var indexItem = AddIndexItem(IndexData, new IndexLineItem { Key = "canvasapps", Name = "Canvas Apps", Type = IndexItemType.Folder, Order = 18, Children = new List<IndexLineItem>() });
+
+            SendProgressSnapshot();
+            int bufferSize = CANVAS_APP_BUFFER_SIZE;
+            for (var i = 0; i < items.Count; i += bufferSize)
+            {
+                if (BgWorker?.CancellationPending == true) return;
+                var ids = items.Select(x => x.Id).Skip(i).Take(bufferSize).ToList();
+                var canvasApps = this.Service.GetData<Models.CanvasApp>(Models.CanvasApp.EntityLogicalName, ids);
+
+                foreach (var record in canvasApps)
+                {
+                    var currentIndexItem = AddIndexItem(indexItem.Children, new IndexLineItem { Key = record.Id.ToString(), Name = record.Name, Type = IndexItemType.Folder, Children = new List<IndexLineItem>() });
+                    currentIndexItem.Metadata.Add("Type", "CanvasApp");
+                    currentIndexItem.Metadata.Add("Id", record.Id.ToString());
+
+                    HandleOutFile(
+                        $@"canvasapps\{record.Id}\metadata.json",
+                        SerializeUtility.SerializeJson(record.GetMetadataObject(IncludeAllProperty)),
+                        null,
+                        currentIndexItem.Children,
+                        new IndexLineItem { Key = "metadata.json", Name = "metadata.json", Type = IndexItemType.FileJson }
+                    );
+                    HandleOutFile(
+                        $@"canvasapps\{record.Id}\definition.json",
+                        SerializeUtility.FormatJson(record.CurrentVersionDefinition),
+                        null,
+                        currentIndexItem.Children,
+                        new IndexLineItem { Key = "definition.json", Name = "definition.json", Type = IndexItemType.FileJson, ContentType = IndexLineItemContentType.CanvasApp }
                     );
                 }
 

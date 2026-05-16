@@ -57,3 +57,21 @@ Proposition :
 •	Depuis la vue de comparaison, permettre de sélectionner des composants "Only in source" et de les exporter automatiquement vers la cible
 •	Ajouter un service SyncService.cs dans Core avec gestion des dépendances entre composants
 •	⚠️ Option avancée — nécessite une confirmation utilisateur forte
+
+--------------
+Customization	Value
+/create-prompt add-component-type	Parameterized prompt: given a CRM component name, scaffold the model, transformer, and UI wiring in one shot
+/create-instruction xrmtoolbox-plugin with applyTo: "**/XrmToolBoxPlugin/**"	XrmToolBox-specific rules (MEF exports, PluginBase lifecycle, connection handling) scoped only to the plugin project
+/create-prompt release-checklist	Prompt to run build, run BundlePackage.bat, verify output, and summarize release artifacts
+------
+Étape	Fichier ciblé	Ce qui est créé/modifié
+1	Core/Models/Dashboard.cs	Modèle CRM avec FindByNames()
+2	Core/Models/ArgumentQueryRequest.cs	Nouveau case "dashboard" dans le parser
+3	Core/Models/ArgumentQueryResponse.cs	Propriété + appel FindByNames()
+4	Core/Exporter.cs	Méthode ExportDashboard() + appel dans Execute()
+5	README.md	Ajout dans la liste des composants supportés-
+-----------
+/add-component-type Dashboard json
+/add-component-type Report binary
+/add-component-type BusinessRule xml
+/add-component-type AppModule metadata-only

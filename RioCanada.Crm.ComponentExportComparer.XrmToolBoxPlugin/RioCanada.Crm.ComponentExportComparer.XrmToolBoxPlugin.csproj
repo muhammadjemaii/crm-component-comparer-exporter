@@ -246,6 +246,9 @@
     <EmbeddedResource Include="FormSetting.resx">
       <DependentUpon>FormSetting.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MyPluginControl.resx">
+      <DependentUpon>MyPluginControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProgressStatusControl.resx">
       <DependentUpon>ProgressStatusControl.cs</DependentUpon>
     </EmbeddedResource>

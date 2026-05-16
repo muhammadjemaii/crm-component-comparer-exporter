@@ -391,6 +391,24 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.Comparision
                         return;
                     }
 
+                    if (item.ContentType == IndexLineItemContentType.Report)
+                    {
+                        var sourceFile = System.IO.Path.Combine(this.SourceDirectory, path);
+                        var targetFile = System.IO.Path.Combine(this.TargetDirectory, path);
+
+                        CompareFile(sourceFile, targetFile);
+                        return;
+                    }
+
+                    if (item.ContentType == IndexLineItemContentType.CanvasApp)
+                    {
+                        var sourceFile = System.IO.Path.Combine(this.SourceDirectory, path);
+                        var targetFile = System.IO.Path.Combine(this.TargetDirectory, path);
+
+                        CompareFile(sourceFile, targetFile);
+                        return;
+                    }
+
                     CompareFile(System.IO.Path.Combine(this.SourceDirectory, path), System.IO.Path.Combine(this.TargetDirectory, path));
                 }
             }

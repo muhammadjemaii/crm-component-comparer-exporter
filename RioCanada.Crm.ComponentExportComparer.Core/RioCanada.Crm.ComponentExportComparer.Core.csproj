@@ -192,9 +192,15 @@
     <Compile Include="Models\AppModule.cs" />
     <Compile Include="Models\ArgumentQueryRequest.cs" />
     <Compile Include="Models\ArgumentQueryResponse.cs" />
+    <Compile Include="Models\CanvasApp.cs" />
     <Compile Include="Models\Comparision.cs" />
     <Compile Include="Models\ComponentType.cs" />
+    <Compile Include="Models\ConnectionRole.cs" />
+    <Compile Include="Models\Report.cs" />
+    <Compile Include="Models\DuplicateRule.cs" />
+    <Compile Include="Models\EmailTemplate.cs" />
     <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\MailMergeTemplate.cs" />
     <Compile Include="Models\PluginType.cs" />
     <Compile Include="Models\Privilege.cs" />
     <Compile Include="Models\Publisher.cs" />

@@ -109,6 +109,8 @@ Table=contact,account,sale*;WebResource=contact.js
 - Action - Pattern should content display name of action.
 - BusinessProcessFlow - Pattern should content display name of business process flow.
 - ModelDrivenApp - Pattern should content display name of model driven app.
+- Report - Pattern should contain display name of report. Exports metadata as JSON and the RDL/RDLC body as a binary file.
+- CanvasApp - Pattern should contain display name of canvas app. Exports metadata as JSON and the app definition as a JSON file.
 
 ## Technical analysis summary
 

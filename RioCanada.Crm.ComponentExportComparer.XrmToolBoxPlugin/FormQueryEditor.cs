@@ -89,6 +89,36 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
                 {
                     textBoxModelDrivenApp.Text = string.Join(",", argumentQueryRequest.ModelDrivenAppPatterns);
                 }
+
+                if (argumentQueryRequest.EmailTemplatePatterns.Count > 0)
+                {
+                    textBoxEmailTemplate.Text = string.Join(",", argumentQueryRequest.EmailTemplatePatterns);
+                }
+
+                if (argumentQueryRequest.MailMergeTemplatePatterns.Count > 0)
+                {
+                    textBoxMailMergeTemplate.Text = string.Join(",", argumentQueryRequest.MailMergeTemplatePatterns);
+                }
+
+                if (argumentQueryRequest.DuplicateRulePatterns.Count > 0)
+                {
+                    textBoxDuplicateRule.Text = string.Join(",", argumentQueryRequest.DuplicateRulePatterns);
+                }
+
+                if (argumentQueryRequest.ConnectionRolePatterns.Count > 0)
+                {
+                    textBoxConnectionRole.Text = string.Join(",", argumentQueryRequest.ConnectionRolePatterns);
+                }
+
+                if (argumentQueryRequest.ReportPatterns.Count > 0)
+                {
+                    textBoxReport.Text = string.Join(",", argumentQueryRequest.ReportPatterns);
+                }
+
+                if (argumentQueryRequest.CanvasAppPatterns.Count > 0)
+                {
+                    textBoxCanvasApp.Text = string.Join(",", argumentQueryRequest.CanvasAppPatterns);
+                }
             }
 
             Comparision.HotKeyManager.AddHotKey(this, AcceptChange, Keys.Enter, alt: true);
@@ -114,6 +144,12 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxAction.PlaceHolder = "Comma seperate action display name pattern";
             this.textBoxBusinessProcessFlow.PlaceHolder = "Comma seperate business process flow display name pattern";
             this.textBoxModelDrivenApp.PlaceHolder = "Comma seperate model-driven app display name pattern";
+            this.textBoxEmailTemplate.PlaceHolder = "Comma seperate email template display name pattern";
+            this.textBoxMailMergeTemplate.PlaceHolder = "Comma seperate mail merge template display name pattern";
+            this.textBoxDuplicateRule.PlaceHolder = "Comma seperate duplicate rule display name pattern";
+            this.textBoxConnectionRole.PlaceHolder = "Comma seperate connection role display name pattern";
+            this.textBoxReport.PlaceHolder = "Comma seperate report display name pattern";
+            this.textBoxCanvasApp.PlaceHolder = "Comma seperate canvas app display name pattern";
         }
 
         private void buttonOk_Click(object sender, EventArgs e)
@@ -196,6 +232,36 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
                 queryItems.Add($"ModelDrivenApp={textBoxModelDrivenApp.Text}");
             }
 
+            if (!string.IsNullOrWhiteSpace(textBoxEmailTemplate.Text))
+            {
+                queryItems.Add($"EmailTemplate={textBoxEmailTemplate.Text}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(textBoxMailMergeTemplate.Text))
+            {
+                queryItems.Add($"MailMergeTemplate={textBoxMailMergeTemplate.Text}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(textBoxDuplicateRule.Text))
+            {
+                queryItems.Add($"DuplicateRule={textBoxDuplicateRule.Text}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(textBoxConnectionRole.Text))
+            {
+                queryItems.Add($"ConnectionRole={textBoxConnectionRole.Text}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(textBoxReport.Text))
+            {
+                queryItems.Add($"Report={textBoxReport.Text}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(textBoxCanvasApp.Text))
+            {
+                queryItems.Add($"CanvasApp={textBoxCanvasApp.Text}");
+            }
+
             if (queryItems.Count == 0)
             {
                 MessageBox.Show("Invalid data");
@@ -216,6 +282,12 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
                 queryItems.Add($"Action=*");
                 queryItems.Add($"BusinessProcessFlow=*");
                 queryItems.Add($"ModelDrivenApp=*");
+                queryItems.Add($"EmailTemplate=*");
+                queryItems.Add($"MailMergeTemplate=*");
+                queryItems.Add($"DuplicateRule=*");
+                queryItems.Add($"ConnectionRole=*");
+                queryItems.Add($"Report=*");
+                queryItems.Add($"CanvasApp=*");
             }
 
             this.ResultQueryString = string.Join(";", queryItems);
@@ -252,6 +324,12 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             textBoxAction.Text = string.Empty;
             textBoxBusinessProcessFlow.Text = string.Empty;
             textBoxModelDrivenApp.Text = string.Empty;
+            textBoxEmailTemplate.Text = string.Empty;
+            textBoxMailMergeTemplate.Text = string.Empty;
+            textBoxDuplicateRule.Text = string.Empty;
+            textBoxConnectionRole.Text = string.Empty;
+            textBoxReport.Text = string.Empty;
+            textBoxCanvasApp.Text = string.Empty;
         }
     }
 }

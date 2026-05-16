@@ -24,6 +24,8 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
         public static string ManyToOne = "Many To One";
         public static string OneToMany = "One To Many";
         public static string Ribbon = "Ribbon";
+        public static string Report = "Report";
+        public static string CanvasApp = "CanvasApp";
     }
 
     public class IndexLineItem

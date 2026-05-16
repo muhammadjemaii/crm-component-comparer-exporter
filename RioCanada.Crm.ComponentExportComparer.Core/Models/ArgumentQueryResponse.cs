@@ -27,6 +27,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                     + this.Actions.Count
                     + this.BusinessProcessFlows.Count
                     + this.ModelDrivenApps.Count
+                    + this.EmailTemplates.Count
+                    + this.MailMergeTemplates.Count
+                    + this.DuplicateRules.Count
+                    + this.ConnectionRoles.Count
+                    + this.Reports.Count
+                    + this.CanvasApps.Count
                     ;
             }
         }
@@ -42,6 +48,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
         internal List<Workflow> Actions { get; } = new List<Workflow>();
         internal List<Workflow> BusinessProcessFlows { get; } = new List<Workflow>();
         internal List<AppModule> ModelDrivenApps { get; } = new List<AppModule>();
+        internal List<EmailTemplate> EmailTemplates { get; } = new List<EmailTemplate>();
+        internal List<MailMergeTemplate> MailMergeTemplates { get; } = new List<MailMergeTemplate>();
+        internal List<DuplicateRule> DuplicateRules { get; } = new List<DuplicateRule>();
+        internal List<ConnectionRole> ConnectionRoles { get; } = new List<ConnectionRole>();
+        internal List<Report> Reports { get; } = new List<Report>();
+        internal List<CanvasApp> CanvasApps { get; } = new List<CanvasApp>();
 
         internal static ArgumentQueryResponse Merge(IEnumerable<ArgumentQueryResponse> componentCollections)
         {
@@ -59,6 +71,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             List<Workflow> actions = new List<Workflow>();
             List<Workflow> businessProcessFlows = new List<Workflow>();
             List<AppModule> modelDrivenApps = new List<AppModule>();
+            List<EmailTemplate> emailTemplates = new List<EmailTemplate>();
+            List<MailMergeTemplate> mailMergeTemplates = new List<MailMergeTemplate>();
+            List<DuplicateRule> duplicateRules = new List<DuplicateRule>();
+            List<ConnectionRole> connectionRoles = new List<ConnectionRole>();
+            List<Report> reports = new List<Report>();
+            List<CanvasApp> canvasApps = new List<CanvasApp>();
 
             foreach (var item in componentCollections)
             {
@@ -74,6 +92,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                 actions.AddRange(item.Actions);
                 businessProcessFlows.AddRange(item.BusinessProcessFlows);
                 modelDrivenApps.AddRange(item.ModelDrivenApps);
+                emailTemplates.AddRange(item.EmailTemplates);
+                mailMergeTemplates.AddRange(item.MailMergeTemplates);
+                duplicateRules.AddRange(item.DuplicateRules);
+                connectionRoles.AddRange(item.ConnectionRoles);
+                reports.AddRange(item.Reports);
+                canvasApps.AddRange(item.CanvasApps);
             }
 
             result.Entities.AddRange(entities.DistinctBy(x => x.Id));
@@ -88,6 +112,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             result.Actions.AddRange(actions.DistinctBy(x => x.Id));
             result.BusinessProcessFlows.AddRange(businessProcessFlows.DistinctBy(x => x.Id));
             result.ModelDrivenApps.AddRange(modelDrivenApps.DistinctBy(x => x.Id));
+            result.EmailTemplates.AddRange(emailTemplates.DistinctBy(x => x.Id));
+            result.MailMergeTemplates.AddRange(mailMergeTemplates.DistinctBy(x => x.Id));
+            result.DuplicateRules.AddRange(duplicateRules.DistinctBy(x => x.Id));
+            result.ConnectionRoles.AddRange(connectionRoles.DistinctBy(x => x.Id));
+            result.Reports.AddRange(reports.DistinctBy(x => x.Id));
+            result.CanvasApps.AddRange(canvasApps.DistinctBy(x => x.Id));
 
             return result;
         }
@@ -111,6 +141,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                 + Math.Min(1, argumentQuery.ActionPatterns.Count)
                 + Math.Min(1, argumentQuery.BusinessProcessFlowPatterns.Count)
                 + Math.Min(1, argumentQuery.ModelDrivenAppPatterns.Count)
+                + Math.Min(1, argumentQuery.EmailTemplatePatterns.Count)
+                + Math.Min(1, argumentQuery.MailMergeTemplatePatterns.Count)
+                + Math.Min(1, argumentQuery.DuplicateRulePatterns.Count)
+                + Math.Min(1, argumentQuery.ConnectionRolePatterns.Count)
+                + Math.Min(1, argumentQuery.ReportPatterns.Count)
+                + Math.Min(1, argumentQuery.CanvasAppPatterns.Count)
                 ;
 
             if (queryCount == 0) return result;
@@ -240,6 +276,60 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             {
                 var modelDrivenApps = AppModule.FindModelDrivenAppByNames(service, argumentQuery.ModelDrivenAppPatterns, solutionIds);
                 result.ModelDrivenApps.AddRange(modelDrivenApps.DistinctBy(x => x.Id));
+                onProgress?.Invoke((progress += progressStep));
+            }
+
+            if (bgWorker?.CancellationPending == true) return result;
+
+            if (argumentQuery.EmailTemplatePatterns.Count > 0)
+            {
+                var emailTemplates = EmailTemplate.FindByNames(service, argumentQuery.EmailTemplatePatterns, solutionIds);
+                result.EmailTemplates.AddRange(emailTemplates.DistinctBy(x => x.Id));
+                onProgress?.Invoke((progress += progressStep));
+            }
+
+            if (bgWorker?.CancellationPending == true) return result;
+
+            if (argumentQuery.MailMergeTemplatePatterns.Count > 0)
+            {
+                var mailMergeTemplates = MailMergeTemplate.FindByNames(service, argumentQuery.MailMergeTemplatePatterns, solutionIds);
+                result.MailMergeTemplates.AddRange(mailMergeTemplates.DistinctBy(x => x.Id));
+                onProgress?.Invoke((progress += progressStep));
+            }
+
+            if (bgWorker?.CancellationPending == true) return result;
+
+            if (argumentQuery.DuplicateRulePatterns.Count > 0)
+            {
+                var duplicateRules = DuplicateRule.FindByNames(service, argumentQuery.DuplicateRulePatterns, solutionIds);
+                result.DuplicateRules.AddRange(duplicateRules.DistinctBy(x => x.Id));
+                onProgress?.Invoke((progress += progressStep));
+            }
+
+            if (bgWorker?.CancellationPending == true) return result;
+
+            if (argumentQuery.ConnectionRolePatterns.Count > 0)
+            {
+                var connectionRoles = ConnectionRole.FindByNames(service, argumentQuery.ConnectionRolePatterns, solutionIds);
+                result.ConnectionRoles.AddRange(connectionRoles.DistinctBy(x => x.Id));
+                onProgress?.Invoke((progress += progressStep));
+            }
+
+            if (bgWorker?.CancellationPending == true) return result;
+
+            if (argumentQuery.ReportPatterns.Count > 0)
+            {
+                var reports = Report.FindByNames(service, argumentQuery.ReportPatterns, solutionIds);
+                result.Reports.AddRange(reports.DistinctBy(x => x.Id));
+                onProgress?.Invoke((progress += progressStep));
+            }
+
+            if (bgWorker?.CancellationPending == true) return result;
+
+            if (argumentQuery.CanvasAppPatterns.Count > 0)
+            {
+                var canvasApps = CanvasApp.FindByNames(service, argumentQuery.CanvasAppPatterns, solutionIds);
+                result.CanvasApps.AddRange(canvasApps.DistinctBy(x => x.Id));
                 onProgress?.Invoke((progress += progressStep));
             }
 

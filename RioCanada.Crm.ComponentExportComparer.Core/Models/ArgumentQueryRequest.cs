@@ -21,6 +21,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
         public List<string> ActionPatterns { get; } = new List<string>();
         public List<string> BusinessProcessFlowPatterns { get; } = new List<string>();
         public List<string> ModelDrivenAppPatterns { get; } = new List<string>();
+        public List<string> EmailTemplatePatterns { get; } = new List<string>();
+        public List<string> MailMergeTemplatePatterns { get; } = new List<string>();
+        public List<string> DuplicateRulePatterns { get; } = new List<string>();
+        public List<string> ConnectionRolePatterns { get; } = new List<string>();
+        public List<string> ReportPatterns { get; } = new List<string>();
+        public List<string> CanvasAppPatterns { get; } = new List<string>();
 
         public bool IncludeSystemWebresource { get; set; }
         public bool IncludeSystemPluginStep { get; set; }
@@ -81,6 +87,24 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                         case "modeldrivenapp":
                             query.ModelDrivenAppPatterns.AddRange(items[1].Split(','));
                             break;
+                        case "emailtemplate":
+                            query.EmailTemplatePatterns.AddRange(items[1].Split(','));
+                            break;
+                        case "mailmergetemplate":
+                            query.MailMergeTemplatePatterns.AddRange(items[1].Split(','));
+                            break;
+                        case "duplicaterule":
+                            query.DuplicateRulePatterns.AddRange(items[1].Split(','));
+                            break;
+                        case "connectionrole":
+                            query.ConnectionRolePatterns.AddRange(items[1].Split(','));
+                            break;
+                        case "report":
+                            query.ReportPatterns.AddRange(items[1].Split(','));
+                            break;
+                        case "canvasapp":
+                            query.CanvasAppPatterns.AddRange(items[1].Split(','));
+                            break;
                         case "includesystemwebresource":
                             query.IncludeSystemWebresource = GetBooleanValue(items[1]);
                             break;
@@ -121,7 +145,13 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             if (this.ActionPatterns.Count > 0) options.Add($"Action={string.Join(",", this.ActionPatterns)}");
             if (this.BusinessProcessFlowPatterns.Count > 0) options.Add($"BusinessProcessFlow={string.Join(",", this.BusinessProcessFlowPatterns)}");
             if (this.ModelDrivenAppPatterns.Count > 0) options.Add($"ModelDrivenApp={string.Join(",", this.ModelDrivenAppPatterns)}");
-            if (this.IncludeSystemWebresource) options.Add($"IncludeSystemWebresource=true");
+            if (this.EmailTemplatePatterns.Count > 0) options.Add($"EmailTemplate={string.Join(",", this.EmailTemplatePatterns)}");
+            if (this.MailMergeTemplatePatterns.Count > 0) options.Add($"MailMergeTemplate={string.Join(",", this.MailMergeTemplatePatterns)}");
+            if (this.DuplicateRulePatterns.Count > 0) options.Add($"DuplicateRule={string.Join(",", this.DuplicateRulePatterns)}");
+            if (this.ConnectionRolePatterns.Count > 0) options.Add($"ConnectionRole={string.Join(",", this.ConnectionRolePatterns)}");
+            if (this.ReportPatterns.Count > 0) options.Add($"Report={string.Join(",", this.ReportPatterns)}");
+            if (this.CanvasAppPatterns.Count > 0) options.Add($"CanvasApp={string.Join(",", this.CanvasAppPatterns)}");
+            if (this.IncludeSystemWebresource)
             if (this.IncludeSystemPluginStep) options.Add($"IncludeSystemPluginStep=true");
             if (this.IncludeAllProperty) options.Add($"IncludeAllProperty=true");
 
