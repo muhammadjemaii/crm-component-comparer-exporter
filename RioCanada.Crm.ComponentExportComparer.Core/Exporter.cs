@@ -45,6 +45,7 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
         readonly int ConnectionRoleWeight = 1;
         readonly int ReportWeight = 1;
         readonly int CanvasAppWeight = 1;
+        readonly int CloudFlowWeight = 1;
 
         //readonly int ENTITY_BUFFER_SIZE = 5;
         readonly int WEBRESOURCE_BUFFER_SIZE = 50;
@@ -60,6 +61,7 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
         readonly int CONNECTION_ROLE_BUFFER_SIZE = 50;
         readonly int REPORT_BUFFER_SIZE = 10;
         readonly int CANVAS_APP_BUFFER_SIZE = 10;
+        readonly int CLOUD_FLOW_BUFFER_SIZE = 50;
 
         bool IncludeAllProperty { get => this.Setting.IncludeAllProperty; }
         bool ReplaceEmptyStringByNull  { get => this.Setting.ReplaceEmptyStringByNull; }
@@ -142,6 +144,7 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
             this.ExportConnectionRole(ArgumentQueryResponse.ConnectionRoles, ConnectionRoleWeight); // Connection Roles
             this.ExportReport(ArgumentQueryResponse.Reports, ReportWeight); // Reports
             this.ExportCanvasApp(ArgumentQueryResponse.CanvasApps, CanvasAppWeight); // Canvas Apps
+            this.ExportCloudFlow(ArgumentQueryResponse.CloudFlows, CloudFlowWeight); // Cloud Flows
 
             if (BgWorker?.CancellationPending == true) return;
 
@@ -1238,27 +1241,199 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
             {
                 if (BgWorker?.CancellationPending == true) return;
                 var ids = items.Select(x => x.Id).Skip(i).Take(bufferSize).ToList();
-                var canvasApps = this.Service.GetData<Models.CanvasApp>(Models.CanvasApp.EntityLogicalName, ids);
+
+                // Query with only the primary key and name — the only attributes guaranteed
+                // on every canvasapp subtype (including Custom Pages). Everything else is
+                // hydrated per-record via RetrieveSafe to avoid attribute-not-found errors.
+                var safeQuery = new Microsoft.Xrm.Sdk.Query.QueryExpression(Models.CanvasApp.EntityLogicalName)
+                {
+                    ColumnSet = new Microsoft.Xrm.Sdk.Query.ColumnSet("canvasappid", "name")
+                };
+                var idCondition = new Microsoft.Xrm.Sdk.Query.ConditionExpression(
+                    "canvasappid", Microsoft.Xrm.Sdk.Query.ConditionOperator.In);
+                safeQuery.Criteria.AddCondition(idCondition);
+                var canvasApps = this.Service.GetData<Models.CanvasApp>(safeQuery, idCondition, ids);
+
+                // Hydrate all optional attributes per record — absent on Custom Pages
+                var optionalColumns = new Microsoft.Xrm.Sdk.Query.ColumnSet(
+                    "uniquename", "ismanaged", "componentstate", "statecode", "statuscode",
+                    "publishedon", "solutionid", "createdon", "modifiedon",
+                    "appversion", "introducedversion", "description",
+                    "currentversiondefinition", "contenturi", "createdby", "modifiedby");
+
+                foreach (var app in canvasApps)
+                {
+                    var extra = this.Service.RetrieveSafe(Models.CanvasApp.EntityLogicalName, app.Id, optionalColumns);
+                    if (extra == null) continue;
+                    foreach (var attr in extra.Attributes)
+                    {
+                        if (!app.Contains(attr.Key))
+                            app[attr.Key] = attr.Value;
+                    }
+                }
 
                 foreach (var record in canvasApps)
                 {
-                    var currentIndexItem = AddIndexItem(indexItem.Children, new IndexLineItem { Key = record.Id.ToString(), Name = record.Name, Type = IndexItemType.Folder, Children = new List<IndexLineItem>() });
+                    // Use UniqueName (schema name) as the folder key so that the same app
+                    // in different environments (different GUIDs) maps to the same path and
+                    // is compared correctly. Fall back to GUID only if UniqueName is absent.
+                    var appKey = !string.IsNullOrWhiteSpace(record.UniqueName)
+                        ? record.UniqueName
+                        : record.Id.ToString();
+
+                    var currentIndexItem = AddIndexItem(indexItem.Children, new IndexLineItem { Key = appKey, Name = record.Name ?? appKey, Type = IndexItemType.Folder, Children = new List<IndexLineItem>() });
                     currentIndexItem.Metadata.Add("Type", "CanvasApp");
                     currentIndexItem.Metadata.Add("Id", record.Id.ToString());
 
                     HandleOutFile(
-                        $@"canvasapps\{record.Id}\metadata.json",
+                        $@"canvasapps\{appKey}\metadata.json",
                         SerializeUtility.SerializeJson(record.GetMetadataObject(IncludeAllProperty)),
                         null,
                         currentIndexItem.Children,
                         new IndexLineItem { Key = "metadata.json", Name = "metadata.json", Type = IndexItemType.FileJson }
                     );
                     HandleOutFile(
-                        $@"canvasapps\{record.Id}\definition.json",
+                        $@"canvasapps\{appKey}\definition.json",
                         SerializeUtility.FormatJson(record.CurrentVersionDefinition),
                         null,
                         currentIndexItem.Children,
                         new IndexLineItem { Key = "definition.json", Name = "definition.json", Type = IndexItemType.FileJson, ContentType = IndexLineItemContentType.CanvasApp }
+                    );
+
+                    // --- Fine-grained .msapp extraction ---
+                    ExportCanvasAppMsappContents(record, appKey, currentIndexItem);
+                }
+
+                CurrentCompleted += ids.Count;
+                OverallCompleted += ids.Count * weight;
+                SendProgressSnapshot();
+            }
+        }
+
+        void ExportCanvasAppMsappContents(Models.CanvasApp record, string appKey, IndexLineItem parentIndexItem)
+        {
+            byte[] msappBytes = null;
+            try
+            {
+                msappBytes = record.DownloadMsapp(this.Service);
+            }
+            catch (Exception ex)
+            {
+                Logger?.Log($"[CanvasApp] Could not download .msapp for '{record.Name}': {ex.Message}");
+            }
+
+            if (msappBytes == null || msappBytes.Length == 0)
+                return;
+
+            // Save the raw .msapp for reference
+            HandleOutFile(
+                $@"canvasapps\{appKey}\app.msapp",
+                null,
+                msappBytes,
+                parentIndexItem.Children,
+                new IndexLineItem { Key = "app.msapp", Name = "app.msapp", Type = IndexItemType.File }
+            );
+
+            // Extract and save individual entries
+            List<Utilities.CanvasAppMsappExtractor.MsappEntry> entries;
+            try
+            {
+                entries = Utilities.CanvasAppMsappExtractor.Extract(msappBytes);
+            }
+            catch (Exception ex)
+            {
+                Logger?.Log($"[CanvasApp] Could not extract .msapp for '{record.Name}': {ex.Message}");
+                return;
+            }
+
+            if (entries.Count == 0)
+                return;
+
+            // Build a sub-folder "msapp" to hold extracted entries
+            var msappIndexItem = AddIndexItem(parentIndexItem.Children, new IndexLineItem
+            {
+                Key = "msapp",
+                Name = "msapp",
+                Type = IndexItemType.Folder,
+                Children = new List<IndexLineItem>()
+            });
+
+            foreach (var entry in entries)
+            {
+                // Normalise to backslash for path building
+                var relPath = entry.EntryPath.Replace('/', '\\');
+                var outPath = $@"canvasapps\{appKey}\msapp\{relPath}";
+
+                // Determine index item type from extension
+                var ext = System.IO.Path.GetExtension(entry.EntryPath).ToLower();
+                IndexItemType itemType;
+                switch (ext)
+                {
+                    case ".json": itemType = IndexItemType.FileJson; break;
+                    case ".xml":  itemType = IndexItemType.FileXml;  break;
+                    default:      itemType = entry.IsText ? IndexItemType.FileTxt : IndexItemType.File; break;
+                }
+
+                // Build nested folder structure inside the msapp index item
+                var entryParent = EnsureMsappFolder(msappIndexItem, entry.EntryPath);
+
+                HandleOutFile(
+                    outPath,
+                    entry.IsText ? entry.TextContent : null,
+                    entry.IsText ? null : entry.BinaryContent,
+                    entryParent.Children,
+                    new IndexLineItem
+                    {
+                        Key  = System.IO.Path.GetFileName(entry.EntryPath),
+                        Name = System.IO.Path.GetFileName(entry.EntryPath),
+                        Type = itemType,
+                    }
+                );
+            }
+        }
+
+        void ExportCloudFlow(List<Workflow> items, int weight)
+        {
+            if (BgWorker?.CancellationPending == true) return;
+            if (items.Count == 0) return;
+
+            CurrentCompleted = 0;
+            CurrentTotal = items.Count;
+            CurrentLabel = "Exporting cloud flows...";
+            var indexItem = AddIndexItem(IndexData, new IndexLineItem { Key = "cloudflows", Name = "Cloud Flows", Type = IndexItemType.Folder, Order = 19, Children = new List<IndexLineItem>() });
+
+            SendProgressSnapshot();
+            int bufferSize = CLOUD_FLOW_BUFFER_SIZE;
+            for (var i = 0; i < items.Count; i += bufferSize)
+            {
+                if (BgWorker?.CancellationPending == true) return;
+                var ids = items.Select(x => x.Id).Skip(i).Take(bufferSize).ToList();
+                var flows = this.Service.GetData<Workflow>(Workflow.EntityLogicalName, ids);
+
+                foreach (var flow in flows)
+                {
+                    // Use UniqueName as key (stable across envs); fall back to Name then GUID.
+                    // Sanitize to strip any characters that are illegal in file/folder paths.
+                    var flowKey = SanitizeFolderName(
+                        !string.IsNullOrWhiteSpace(flow.UniqueName)
+                            ? flow.UniqueName
+                            : (!string.IsNullOrWhiteSpace(flow.Name) ? flow.Name : flow.Id.ToString()));
+
+                    var currentIndexItem = AddIndexItem(indexItem.Children, new IndexLineItem { Key = flowKey, Name = flow.Name ?? flowKey, Type = IndexItemType.Folder, Children = new List<IndexLineItem>() });
+
+                    HandleOutFile(
+                        $@"cloudflows\{flowKey}\metadata.json",
+                        SerializeUtility.SerializeJson(flow.GetMetadataObjectByCategory(IncludeAllProperty)),
+                        null,
+                        currentIndexItem.Children,
+                        new IndexLineItem { Key = "metadata.json", Name = "metadata.json", Type = IndexItemType.FileJson }
+                    );
+                    HandleOutFile(
+                        $@"cloudflows\{flowKey}\clientdata.txt",
+                        flow.ClientData,
+                        null,
+                        currentIndexItem.Children,
+                        new IndexLineItem { Key = "clientdata.txt", Name = "clientdata.txt", Type = IndexItemType.FileTxt }
                     );
                 }
 
@@ -1266,6 +1441,68 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
                 OverallCompleted += ids.Count * weight;
                 SendProgressSnapshot();
             }
+        }
+
+        /// <summary>
+        /// Removes or replaces characters that are illegal in Windows file/folder names,
+        /// including path separators, so that a display name can be used safely as a folder key.
+        /// </summary>
+        static string SanitizeFolderName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return "_";
+
+            // Replace path separators with '_' to avoid accidentally creating sub-folders.
+            name = name.Replace('/', '_').Replace('\\', '_');
+
+            // Replace all other invalid file-name characters with '_'.
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(c, '_');
+            }
+
+            // Trim trailing dots/spaces (Windows disallows them at end of folder names).
+            name = name.TrimEnd('.', ' ');
+
+            return string.IsNullOrWhiteSpace(name) ? "_" : name;
+        }
+
+        /// <summary>
+        /// Walks / creates the folder hierarchy inside msappRoot for the given entryPath.
+        /// Returns the direct parent IndexLineItem whose Children list should receive the file.
+        /// </summary>
+        IndexLineItem EnsureMsappFolder(IndexLineItem msappRoot, string entryPath)
+        {
+            var parts = entryPath.Replace('\\', '/').Split('/');
+            var current = msappRoot;
+
+            // Walk all parts except the last (which is the file name)
+            for (int i = 0; i < parts.Length - 1; i++)
+            {
+                var part = parts[i];
+                if (string.IsNullOrEmpty(part)) continue;
+
+                if (current.Children == null)
+                    current.Children = new List<IndexLineItem>();
+
+                var existing = current.Children.Find(x => x.Key == part);
+                if (existing == null)
+                {
+                    existing = AddIndexItem(current.Children, new IndexLineItem
+                    {
+                        Key      = part,
+                        Name     = part,
+                        Type     = IndexItemType.Folder,
+                        Children = new List<IndexLineItem>()
+                    });
+                }
+
+                current = existing;
+            }
+
+            if (current.Children == null)
+                current.Children = new List<IndexLineItem>();
+
+            return current;
         }
 
         void SendProgressSnapshot()

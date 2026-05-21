@@ -101,8 +101,9 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                 query.Criteria.AddCondition("name", ConditionOperator.NotLike, "msdyn[_]%");
                 query.Criteria.AddCondition("name", ConditionOperator.NotLike, "adx[_]%");
                 query.Criteria.AddCondition("name", ConditionOperator.NotLike, "cc[_]MscrmControls%");
-                query.Criteria.AddCondition("name", ConditionOperator.NotLike, "%/%");
             }
+            //                query.Criteria.AddCondition("name", ConditionOperator.NotLike, "%/%");
+
 
             Utilities.Helper.ApplyPatternFilter(query, "name", patterns);
             Utilities.Helper.ApplySolutionFilter(query, EntityLogicalName + "id", solutionIds);

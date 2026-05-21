@@ -31,7 +31,8 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
         private Tuple<string, string> LastResultDirectories { get; set; }
         private string CompareResultTempFolder { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"CRM_Compare_{Guid.NewGuid()}");
         private Logger Logger { get; }
-        private AutoCompleteStringCollection SolutionSuggestion { get; set; }
+        private List<string> SolutionSuggestion { get; set; }
+        private List<string> TargetSolutionSuggestion { get; set; }
 
         public MyPluginControl()
         {
@@ -118,6 +119,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
                     buttonCompare.Enabled = true;
                     SourceConnectionDetail = detail;
                     SolutionSuggestion = null;
+                    TargetSolutionSuggestion = null;
                 }
                 else
                 {
@@ -125,6 +127,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
                     TargetService = detail.ServiceClient;
                     TargetConnectionName = detail.ConnectionName;
                     TargetConnectionDetail = detail;
+                    TargetSolutionSuggestion = null;
                     ZipFilePath = null;
                     labelZipFile.Text = "Not selected";
                     labelZipFile.ForeColor = Color.Black;
@@ -428,7 +431,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
         private void AddQuery()
         {
             this.InitializeSolutionSuggestion();
-            FormQueryEditor frm = new FormQueryEditor(this.SolutionSuggestion);
+            FormQueryEditor frm = new FormQueryEditor(this.SolutionSuggestion, this.TargetSolutionSuggestion);
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 string query = frm.ResultQueryString;
@@ -449,7 +452,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             var selectedItem = listViewQueries.SelectedItems[0];
 
             this.InitializeSolutionSuggestion();
-            FormQueryEditor frm = new FormQueryEditor(this.SolutionSuggestion, selectedItem.Text);
+            FormQueryEditor frm = new FormQueryEditor(this.SolutionSuggestion, this.TargetSolutionSuggestion, selectedItem.Text);
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 string query = frm.ResultQueryString;
@@ -481,11 +484,11 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             if (this.Service == null) return;
             if (SolutionSuggestion == null)
             {
-                var solutions = ExportService.GetSolutionLookup(new OrganizationService(this.Service, this.GetConnectionInfo(this.ConnectionDetail)));
-                var suggestions = new AutoCompleteStringCollection();
-
-                foreach (var item in solutions) suggestions.Add(item.FirstOrDefault());
-                SolutionSuggestion = suggestions;
+                SolutionSuggestion = ExportService.GetCustomSolutions(new OrganizationService(this.Service, this.GetConnectionInfo(this.ConnectionDetail)));
+            }
+            if (TargetSolutionSuggestion == null && TargetService != null)
+            {
+                TargetSolutionSuggestion = ExportService.GetCustomSolutions(new OrganizationService(TargetService, this.GetConnectionInfo(this.TargetConnectionDetail)));
             }
         }
 

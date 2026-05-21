@@ -9,6 +9,7 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
     public class ArgumentQueryRequest
     {
         public List<string> Solutions { get; } = new List<string>();
+        public string TargetSolution { get; set; }
         public List<string> EntityPatterns { get; } = new List<string>();
         public List<string> WebResourcePatterns { get; } = new List<string>();
         public List<string> PluginStepPatterns { get; } = new List<string>();
@@ -27,6 +28,8 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
         public List<string> ConnectionRolePatterns { get; } = new List<string>();
         public List<string> ReportPatterns { get; } = new List<string>();
         public List<string> CanvasAppPatterns { get; } = new List<string>();
+        public List<string> PluginAssemblyPatterns { get; } = new List<string>();
+        public List<string> CloudFlowPatterns { get; } = new List<string>();
 
         public bool IncludeSystemWebresource { get; set; }
         public bool IncludeSystemPluginStep { get; set; }
@@ -50,6 +53,9 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                     {
                         case "solution":
                             query.Solutions.AddRange(items[1].Split(','));
+                            break;
+                        case "targetsolution":
+                            query.TargetSolution = items[1].Trim();
                             break;
                         case "table":
                             query.EntityPatterns.AddRange(items[1].Split(','));
@@ -105,6 +111,12 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                         case "canvasapp":
                             query.CanvasAppPatterns.AddRange(items[1].Split(','));
                             break;
+                        case "pluginassembly":
+                            query.PluginAssemblyPatterns.AddRange(items[1].Split(','));
+                            break;
+                        case "cloudflow":
+                            query.CloudFlowPatterns.AddRange(items[1].Split(','));
+                            break;
                         case "includesystemwebresource":
                             query.IncludeSystemWebresource = GetBooleanValue(items[1]);
                             break;
@@ -133,6 +145,7 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
         {
             List<string> options = new List<string>();
             if (this.Solutions.Count > 0) options.Add($"Solution={string.Join(",", this.Solutions)}");
+            if (!string.IsNullOrWhiteSpace(this.TargetSolution)) options.Add($"TargetSolution={this.TargetSolution}");
             if (this.EntityPatterns.Count > 0) options.Add($"Table={string.Join(",", this.EntityPatterns)}");
             if (this.WebResourcePatterns.Count > 0) options.Add($"WebResource={string.Join(",", this.WebResourcePatterns)}");
             if (this.PluginStepPatterns.Count > 0) options.Add($"PluginStep={string.Join(",", this.PluginStepPatterns)}");
@@ -151,6 +164,8 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             if (this.ConnectionRolePatterns.Count > 0) options.Add($"ConnectionRole={string.Join(",", this.ConnectionRolePatterns)}");
             if (this.ReportPatterns.Count > 0) options.Add($"Report={string.Join(",", this.ReportPatterns)}");
             if (this.CanvasAppPatterns.Count > 0) options.Add($"CanvasApp={string.Join(",", this.CanvasAppPatterns)}");
+            if (this.PluginAssemblyPatterns.Count > 0) options.Add($"PluginAssembly={string.Join(",", this.PluginAssemblyPatterns)}");
+            if (this.CloudFlowPatterns.Count > 0) options.Add($"CloudFlow={string.Join(",", this.CloudFlowPatterns)}");
             if (this.IncludeSystemWebresource)
             if (this.IncludeSystemPluginStep) options.Add($"IncludeSystemPluginStep=true");
             if (this.IncludeAllProperty) options.Add($"IncludeAllProperty=true");

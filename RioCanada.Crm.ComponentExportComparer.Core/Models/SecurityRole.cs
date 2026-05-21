@@ -58,7 +58,9 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
 
             if (item == null)
             {
-                throw new Exception($"Record not found in \"{EntityLogicalName}\" for id {id}");
+                // Role not found in this environment (e.g. deleted or not imported yet).
+                // Fall back to the raw ID string so form XML transformation can continue.
+                return $"[unknown-role:{id}]";
             }
 
             return item.Name;

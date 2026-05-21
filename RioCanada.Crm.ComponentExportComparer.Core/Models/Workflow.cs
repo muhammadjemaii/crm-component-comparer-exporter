@@ -153,6 +153,11 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             return FindByNames(service, (int)WorkflowCategory.BusinessProcessFlow, patterns, solutionIds);
         }
 
+        public static List<Workflow> FindModernFlowByNames(OrganizationService service, IEnumerable<string> patterns, IEnumerable<Guid> solutionIds)
+        {
+            return FindByNames(service, (int)WorkflowCategory.ModernFlow, patterns, solutionIds);
+        }
+
         public object GetMetadataObjectByCategory(bool includeAllProperty)
         {
             if (includeAllProperty)

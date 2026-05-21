@@ -48,6 +48,15 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Extensions
             }
         }
 
+        public string GetAccessToken()
+        {
+            if (this.Service is CrmServiceClient crmClient)
+            {
+                return crmClient.CurrentAccessToken;
+            }
+            return null;
+        }
+
         public ConnectionInformation ConnectionInfo { get; }
 
         public Dictionary<string, object> CacheData { get; } = new Dictionary<string, object>();
@@ -161,6 +170,22 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Extensions
         public Entity Retrieve(string entityName, Guid id)
         {
             return this.Retrieve(entityName, id, new ColumnSet(true));
+        }
+
+        /// <summary>
+        /// Retrieves a record without going through the retry/dialog handler.
+        /// Returns null instead of throwing if the call fails (e.g. attribute absent on a subtype).
+        /// </summary>
+        public Entity RetrieveSafe(string entityName, Guid id, ColumnSet columnSet)
+        {
+            try
+            {
+                return this.Service.Retrieve(entityName, id, columnSet);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public T Retrieve<T>(string entityName, Guid id) where T : Entity

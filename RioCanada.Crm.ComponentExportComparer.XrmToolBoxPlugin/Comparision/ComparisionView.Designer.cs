@@ -51,6 +51,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.Comparision
             this.imageCheckboxModified = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.ImageCheckbox();
             this.imageCheckboxSource = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.ImageCheckbox();
             this.imageCheckboxTarget = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.ImageCheckbox();
+            this.buttonExportReport = new System.Windows.Forms.Button();
             this.contextMenuStripButton.SuspendLayout();
             this.contextMenuStripGrid.SuspendLayout();
             this.SuspendLayout();
@@ -267,6 +268,17 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.Comparision
             this.imageCheckboxTarget.UncheckedImage = global::RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.AppResource.UncheckRedDark;
             this.imageCheckboxTarget.CheckedChanged += new System.EventHandler(this.imageCheckboxTarget_CheckedChanged);
             // 
+            // buttonExportReport
+            // 
+            this.buttonExportReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExportReport.Location = new System.Drawing.Point(660, 429);
+            this.buttonExportReport.Name = "buttonExportReport";
+            this.buttonExportReport.Size = new System.Drawing.Size(135, 23);
+            this.buttonExportReport.TabIndex = 20;
+            this.buttonExportReport.Text = "📊 Export Report";
+            this.buttonExportReport.UseVisualStyleBackColor = true;
+            this.buttonExportReport.Click += new System.EventHandler(this.buttonExportReport_Click);
+            // 
             // ComparisionView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -277,6 +289,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.Comparision
             this.Controls.Add(this.imageCheckboxUnchanged);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonOption);
+            this.Controls.Add(this.buttonExportReport);
             this.Controls.Add(this.comparisionDataView1);
             this.Controls.Add(this.breadcrumbControl1);
             this.Name = "ComparisionView";
@@ -310,5 +323,6 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.Comparision
         private ImageCheckbox imageCheckboxModified;
         private ImageCheckbox imageCheckboxSource;
         private ImageCheckbox imageCheckboxTarget;
+        private System.Windows.Forms.Button buttonExportReport;
     }
 }

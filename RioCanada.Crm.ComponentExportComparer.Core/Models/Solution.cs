@@ -64,5 +64,21 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
 
             return service.GetData<Solution>(query).ToLookup(x => x.Id, x => x.FriendlyName);
         }
+
+        public static List<string> GetCustomSolutions(OrganizationService service)
+        {
+            QueryExpression query = new QueryExpression(Solution.EntityLogicalName);
+            query.ColumnSet.AddColumns("solutionid", "friendlyname", "ismanaged", "isvisible");
+            query.Criteria.AddCondition("isvisible", ConditionOperator.Equal, true);
+            query.AddOrder("friendlyname", OrderType.Ascending);
+
+            // Use GetBigData (paginated) instead of GetData (first page only) so that
+            // all solutions are returned even in environments with many solutions.
+            return service.GetBigData<Solution>(query)
+                .Select(x => x.FriendlyName)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .ToList();
+        }
     }
 }

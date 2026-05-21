@@ -103,6 +103,18 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
                 logger?.Log("Transforming ribbon xml");
                 string xmlString = Encoding.UTF8.GetString(data);
 
+                // Dataverse sometimes serializes booleans as "True"/"False" (Pascal case),
+                // which XmlSerializer rejects. Normalize all attribute and element boolean
+                // values to lowercase before deserializing.
+                xmlString = System.Text.RegularExpressions.Regex.Replace(
+                    xmlString,
+                    @"(?<=[>=""])True(?=[<""])",
+                    "true");
+                xmlString = System.Text.RegularExpressions.Regex.Replace(
+                    xmlString,
+                    @"(?<=[>=""])False(?=[<""])",
+                    "false");
+
                 System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(RibbonClasses.RibbonDefinitions));
                 System.IO.StringReader stringReader = new System.IO.StringReader(xmlString);
                 RibbonClasses.RibbonDefinitions ribbon = (RibbonClasses.RibbonDefinitions)serializer.Deserialize(stringReader);

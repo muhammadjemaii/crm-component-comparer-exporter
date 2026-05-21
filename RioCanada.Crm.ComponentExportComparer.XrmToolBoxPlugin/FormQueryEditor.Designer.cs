@@ -1,4 +1,4 @@
-﻿
+
 namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
 {
     partial class FormQueryEditor
@@ -29,7 +29,9 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxSolution = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
+            this.comboBoxSolution = new System.Windows.Forms.ComboBox();
+            this.comboBoxTargetSolution = new System.Windows.Forms.ComboBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label13 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -68,25 +70,25 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxReport = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.textBoxCanvasApp = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBoxCloudFlow = new RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.CustomTextBox();
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonReset = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // textBoxSolution
+            // comboBoxSolution
             // 
-            this.textBoxSolution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.comboBoxSolution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSolution.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.textBoxSolution.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBoxSolution.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
-            this.textBoxSolution.ForeColor = System.Drawing.Color.Empty;
-            this.textBoxSolution.Location = new System.Drawing.Point(159, 3);
-            this.textBoxSolution.Name = "textBoxSolution";
-            this.textBoxSolution.PlaceHolder = "";
-            this.textBoxSolution.Size = new System.Drawing.Size(360, 25);
-            this.textBoxSolution.TabIndex = 0;
+            this.comboBoxSolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSolution.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.comboBoxSolution.FormattingEnabled = true;
+            this.comboBoxSolution.Location = new System.Drawing.Point(159, 3);
+            this.comboBoxSolution.Name = "comboBoxSolution";
+            this.comboBoxSolution.Size = new System.Drawing.Size(360, 25);
+            this.comboBoxSolution.TabIndex = 0;
             // 
             // tableLayoutPanel1
             // 
@@ -95,47 +97,53 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanel1.Controls.Add(this.label13, 0, 12);
-            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxEntity, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxSolution, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label13, 0, 13);
+            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxEntity, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxSolution, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxWebresource, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxPluginstep, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxOptionSet, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxDashboard, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxSiteMap, 1, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label7, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxSecurityRole, 1, 7);
-            this.tableLayoutPanel1.Controls.Add(this.label8, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxBusinessRule, 1, 9);
-            this.tableLayoutPanel1.Controls.Add(this.label10, 0, 9);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxWorkflow, 1, 8);
-            this.tableLayoutPanel1.Controls.Add(this.label9, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxBusinessProcessFlow, 1, 11);
-            this.tableLayoutPanel1.Controls.Add(this.label12, 0, 11);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxAction, 1, 10);
-            this.tableLayoutPanel1.Controls.Add(this.label11, 0, 10);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxModelDrivenApp, 1, 12);
-            this.tableLayoutPanel1.Controls.Add(this.label14, 0, 13);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxEmailTemplate, 1, 13);
-            this.tableLayoutPanel1.Controls.Add(this.label15, 0, 14);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxMailMergeTemplate, 1, 14);
-            this.tableLayoutPanel1.Controls.Add(this.label16, 0, 15);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxDuplicateRule, 1, 15);
-            this.tableLayoutPanel1.Controls.Add(this.label17, 0, 16);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxConnectionRole, 1, 16);
-            this.tableLayoutPanel1.Controls.Add(this.label18, 0, 17);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxReport, 1, 17);
-            this.tableLayoutPanel1.Controls.Add(this.label19, 0, 18);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxCanvasApp, 1, 18);
+            this.tableLayoutPanel1.Controls.Add(this.label20, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxTargetSolution, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxWebresource, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxPluginstep, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxOptionSet, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxDashboard, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxSiteMap, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.label7, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxSecurityRole, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.label8, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxBusinessRule, 1, 10);
+            this.tableLayoutPanel1.Controls.Add(this.label10, 0, 10);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxWorkflow, 1, 9);
+            this.tableLayoutPanel1.Controls.Add(this.label9, 0, 9);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxBusinessProcessFlow, 1, 12);
+            this.tableLayoutPanel1.Controls.Add(this.label12, 0, 12);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxAction, 1, 11);
+            this.tableLayoutPanel1.Controls.Add(this.label11, 0, 11);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxModelDrivenApp, 1, 13);
+            this.tableLayoutPanel1.Controls.Add(this.label14, 0, 14);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxEmailTemplate, 1, 14);
+            this.tableLayoutPanel1.Controls.Add(this.label15, 0, 15);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxMailMergeTemplate, 1, 15);
+            this.tableLayoutPanel1.Controls.Add(this.label16, 0, 16);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxDuplicateRule, 1, 16);
+            this.tableLayoutPanel1.Controls.Add(this.label17, 0, 17);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxConnectionRole, 1, 17);
+            this.tableLayoutPanel1.Controls.Add(this.label18, 0, 18);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxReport, 1, 18);
+            this.tableLayoutPanel1.Controls.Add(this.label19, 0, 19);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxCanvasApp, 1, 19);
+            this.tableLayoutPanel1.Controls.Add(this.label21, 0, 20);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxCloudFlow, 1, 20);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 13);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 19;
+            this.tableLayoutPanel1.RowCount = 21;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -155,17 +163,29 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(522, 700);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(522, 770);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
-            // label13
+            // comboBoxTargetSolution
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(3, 420);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(107, 17);
-            this.label13.TabIndex = 25;
-            this.label13.Text = "ModelDrivenApp";
+            this.comboBoxTargetSolution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxTargetSolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTargetSolution.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.comboBoxTargetSolution.FormattingEnabled = true;
+            this.comboBoxTargetSolution.Location = new System.Drawing.Point(159, 38);
+            this.comboBoxTargetSolution.Name = "comboBoxTargetSolution";
+            this.comboBoxTargetSolution.Size = new System.Drawing.Size(360, 25);
+            this.comboBoxTargetSolution.TabIndex = 38;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(3, 35);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(100, 17);
+            this.label20.TabIndex = 39;
+            this.label20.Text = "Target Solution";
             // 
             // label6
             // 
@@ -527,10 +547,28 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxCanvasApp.Size = new System.Drawing.Size(360, 25);
             this.textBoxCanvasApp.TabIndex = 37;
             // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Name = "label21";
+            this.label21.TabIndex = 40;
+            this.label21.Text = "Cloud Flow";
+            // 
+            // textBoxCloudFlow
+            // 
+            this.textBoxCloudFlow.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxCloudFlow.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
+            this.textBoxCloudFlow.ForeColor = System.Drawing.Color.Empty;
+            this.textBoxCloudFlow.Name = "textBoxCloudFlow";
+            this.textBoxCloudFlow.PlaceHolder = "";
+            this.textBoxCloudFlow.Size = new System.Drawing.Size(360, 25);
+            this.textBoxCloudFlow.TabIndex = 41;
+            // 
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(393, 728);
+            this.buttonOk.Location = new System.Drawing.Point(393, 763);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(66, 27);
             this.buttonOk.TabIndex = 2;
@@ -542,7 +580,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(464, 728);
+            this.buttonCancel.Location = new System.Drawing.Point(464, 763);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(66, 27);
             this.buttonCancel.TabIndex = 3;
@@ -552,7 +590,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             // buttonReset
             // 
             this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonReset.Location = new System.Drawing.Point(10, 728);
+            this.buttonReset.Location = new System.Drawing.Point(10, 763);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(66, 27);
             this.buttonReset.TabIndex = 4;
@@ -565,7 +603,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(542, 765);
+            this.ClientSize = new System.Drawing.Size(542, 800);
             this.Controls.Add(this.buttonReset);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
@@ -589,7 +627,9 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
         }
 
         #endregion
-        private CustomTextBox textBoxSolution;
+        private System.Windows.Forms.ComboBox comboBoxSolution;
+        private System.Windows.Forms.ComboBox comboBoxTargetSolution;
+        private System.Windows.Forms.Label label20;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -631,5 +671,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
         private CustomTextBox textBoxReport;
         private System.Windows.Forms.Label label19;
         private CustomTextBox textBoxCanvasApp;
+        private System.Windows.Forms.Label label21;
+        private CustomTextBox textBoxCloudFlow;
     }
 }

@@ -16,10 +16,26 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
     {
         public string ResultQueryString { get; private set; }
 
-        public FormQueryEditor(AutoCompleteStringCollection solutionSuggestion, string query = null)
+        public FormQueryEditor(List<string> customSolutions, List<string> targetSolutions, string query = null)
         {
             InitializeComponent();
             this.InitializePlaceholder();
+
+            if (customSolutions != null)
+            {
+                comboBoxSolution.Items.Add(string.Empty);
+                foreach (var sol in customSolutions)
+                    comboBoxSolution.Items.Add(sol);
+                comboBoxSolution.SelectedIndex = 0;
+            }
+
+            if (targetSolutions != null)
+            {
+                comboBoxTargetSolution.Items.Add(string.Empty);
+                foreach (var sol in targetSolutions)
+                    comboBoxTargetSolution.Items.Add(sol);
+                comboBoxTargetSolution.SelectedIndex = 0;
+            }
 
             if (!string.IsNullOrWhiteSpace(query))
             {
@@ -27,7 +43,15 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
 
                 if (argumentQueryRequest.Solutions.Count > 0)
                 {
-                    textBoxSolution.Text = string.Join(",", argumentQueryRequest.Solutions);
+                    var savedSolution = argumentQueryRequest.Solutions.First();
+                    var idx = comboBoxSolution.Items.IndexOf(savedSolution);
+                    if (idx >= 0) comboBoxSolution.SelectedIndex = idx;
+                }
+
+                if (!string.IsNullOrWhiteSpace(argumentQueryRequest.TargetSolution))
+                {
+                    var idx = comboBoxTargetSolution.Items.IndexOf(argumentQueryRequest.TargetSolution);
+                    if (idx >= 0) comboBoxTargetSolution.SelectedIndex = idx;
                 }
 
                 if (argumentQueryRequest.EntityPatterns.Count > 0)
@@ -119,19 +143,18 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
                 {
                     textBoxCanvasApp.Text = string.Join(",", argumentQueryRequest.CanvasAppPatterns);
                 }
+
+                if (argumentQueryRequest.CloudFlowPatterns.Count > 0)
+                {
+                    textBoxCloudFlow.Text = string.Join(",", argumentQueryRequest.CloudFlowPatterns);
+                }
             }
 
             Comparision.HotKeyManager.AddHotKey(this, AcceptChange, Keys.Enter, alt: true);
-
-            if (solutionSuggestion != null)
-            {
-                this.textBoxSolution.AutoCompleteCustomSource = solutionSuggestion;
-            }
         }
 
         private void InitializePlaceholder()
         {
-            this.textBoxSolution.PlaceHolder = "Solution display name";
             this.textBoxEntity.PlaceHolder = "Comma seperate table schema name pattern";
             this.textBoxWebresource.PlaceHolder = "Comma seperate webresource schema name pattern";
             this.textBoxPluginstep.PlaceHolder = "Comma seperate plugin-step display name pattern";
@@ -150,6 +173,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
             this.textBoxConnectionRole.PlaceHolder = "Comma seperate connection role display name pattern";
             this.textBoxReport.PlaceHolder = "Comma seperate report display name pattern";
             this.textBoxCanvasApp.PlaceHolder = "Comma seperate canvas app display name pattern";
+            this.textBoxCloudFlow.PlaceHolder = "Comma seperate cloud flow display name pattern";
         }
 
         private void buttonOk_Click(object sender, EventArgs e)
@@ -161,15 +185,18 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
         {
             List<string> queryItems = new List<string>();
 
-            if (!string.IsNullOrWhiteSpace(textBoxSolution.Text))
-            {
-                if (textBoxSolution.Text.Split(',').Select(x => x.Trim()).Where(x => x == "*").Count() > 0)
-                {
-                    MessageBox.Show("\"*\" (All) not allowed for solution");
-                    return;
-                }
+            var selectedSolution = comboBoxSolution.SelectedItem as string;
 
-                queryItems.Add($"Solution={textBoxSolution.Text}");
+            if (!string.IsNullOrWhiteSpace(selectedSolution))
+            {
+                queryItems.Add($"Solution={selectedSolution}");
+            }
+
+            var selectedTargetSolution = comboBoxTargetSolution.SelectedItem as string;
+
+            if (!string.IsNullOrWhiteSpace(selectedTargetSolution))
+            {
+                queryItems.Add($"TargetSolution={selectedTargetSolution}");
             }
 
             if (!string.IsNullOrWhiteSpace(textBoxEntity.Text))
@@ -262,13 +289,18 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
                 queryItems.Add($"CanvasApp={textBoxCanvasApp.Text}");
             }
 
+            if (!string.IsNullOrWhiteSpace(textBoxCloudFlow.Text))
+            {
+                queryItems.Add($"CloudFlow={textBoxCloudFlow.Text}");
+            }
+
             if (queryItems.Count == 0)
             {
                 MessageBox.Show("Invalid data");
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(textBoxSolution.Text) && queryItems.Count == 1)
+            if (!string.IsNullOrWhiteSpace(selectedSolution) && queryItems.Count == 1)
             {
                 queryItems.Add($"Table=*");
                 queryItems.Add($"WebResource=*");
@@ -288,6 +320,7 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
                 queryItems.Add($"ConnectionRole=*");
                 queryItems.Add($"Report=*");
                 queryItems.Add($"CanvasApp=*");
+                queryItems.Add($"CloudFlow=*");
             }
 
             this.ResultQueryString = string.Join(";", queryItems);
@@ -311,7 +344,8 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin
 
         private void buttonReset_Click(object sender, EventArgs e)
         {
-            textBoxSolution.Text = string.Empty;
+            if (comboBoxSolution.Items.Count > 0) comboBoxSolution.SelectedIndex = 0;
+            if (comboBoxTargetSolution.Items.Count > 0) comboBoxTargetSolution.SelectedIndex = 0;
             textBoxEntity.Text = string.Empty;
             textBoxWebresource.Text = string.Empty;
             textBoxPluginstep.Text = string.Empty;

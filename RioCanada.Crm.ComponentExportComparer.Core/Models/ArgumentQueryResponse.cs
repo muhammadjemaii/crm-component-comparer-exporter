@@ -33,6 +33,8 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                     + this.ConnectionRoles.Count
                     + this.Reports.Count
                     + this.CanvasApps.Count
+                    + this.PluginAssemblies.Count
+                    + this.CloudFlows.Count
                     ;
             }
         }
@@ -54,6 +56,8 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
         internal List<ConnectionRole> ConnectionRoles { get; } = new List<ConnectionRole>();
         internal List<Report> Reports { get; } = new List<Report>();
         internal List<CanvasApp> CanvasApps { get; } = new List<CanvasApp>();
+        internal List<PluginAssembly> PluginAssemblies { get; } = new List<PluginAssembly>();
+        internal List<Workflow> CloudFlows { get; } = new List<Workflow>();
 
         internal static ArgumentQueryResponse Merge(IEnumerable<ArgumentQueryResponse> componentCollections)
         {
@@ -77,6 +81,8 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             List<ConnectionRole> connectionRoles = new List<ConnectionRole>();
             List<Report> reports = new List<Report>();
             List<CanvasApp> canvasApps = new List<CanvasApp>();
+            List<PluginAssembly> pluginAssemblies = new List<PluginAssembly>();
+            List<Workflow> cloudFlows = new List<Workflow>();
 
             foreach (var item in componentCollections)
             {
@@ -98,6 +104,8 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                 connectionRoles.AddRange(item.ConnectionRoles);
                 reports.AddRange(item.Reports);
                 canvasApps.AddRange(item.CanvasApps);
+                pluginAssemblies.AddRange(item.PluginAssemblies);
+                cloudFlows.AddRange(item.CloudFlows);
             }
 
             result.Entities.AddRange(entities.DistinctBy(x => x.Id));
@@ -118,6 +126,8 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             result.ConnectionRoles.AddRange(connectionRoles.DistinctBy(x => x.Id));
             result.Reports.AddRange(reports.DistinctBy(x => x.Id));
             result.CanvasApps.AddRange(canvasApps.DistinctBy(x => x.Id));
+            result.PluginAssemblies.AddRange(pluginAssemblies.DistinctBy(x => x.Id));
+            result.CloudFlows.AddRange(cloudFlows.DistinctBy(x => x.Id));
 
             return result;
         }
@@ -147,6 +157,7 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
                 + Math.Min(1, argumentQuery.ConnectionRolePatterns.Count)
                 + Math.Min(1, argumentQuery.ReportPatterns.Count)
                 + Math.Min(1, argumentQuery.CanvasAppPatterns.Count)
+                + Math.Min(1, argumentQuery.CloudFlowPatterns.Count)
                 ;
 
             if (queryCount == 0) return result;
@@ -330,6 +341,15 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             {
                 var canvasApps = CanvasApp.FindByNames(service, argumentQuery.CanvasAppPatterns, solutionIds);
                 result.CanvasApps.AddRange(canvasApps.DistinctBy(x => x.Id));
+                onProgress?.Invoke((progress += progressStep));
+            }
+
+            if (bgWorker?.CancellationPending == true) return result;
+
+            if (argumentQuery.CloudFlowPatterns.Count > 0)
+            {
+                var cloudFlows = Workflow.FindModernFlowByNames(service, argumentQuery.CloudFlowPatterns, solutionIds);
+                result.CloudFlows.AddRange(cloudFlows.DistinctBy(x => x.Id));
                 onProgress?.Invoke((progress += progressStep));
             }
 

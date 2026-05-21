@@ -196,6 +196,7 @@
     <Compile Include="Models\Comparision.cs" />
     <Compile Include="Models\ComponentType.cs" />
     <Compile Include="Models\ConnectionRole.cs" />
+    <Compile Include="Models\PluginAssembly.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\DuplicateRule.cs" />
     <Compile Include="Models\EmailTemplate.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Models\WebResource.cs" />
     <Compile Include="Models\Workflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\CanvasAppMsappExtractor.cs" />
     <Compile Include="Utilities\Helper.cs" />
     <Compile Include="Utilities\SerializeUtility.cs" />
   </ItemGroup>

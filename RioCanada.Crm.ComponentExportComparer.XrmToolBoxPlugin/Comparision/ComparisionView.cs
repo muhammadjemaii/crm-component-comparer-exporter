@@ -775,5 +775,43 @@ namespace RioCanada.Crm.ComponentExportComparer.XrmToolBoxPlugin.Comparision
         {
             this.RenderData();
         }
+
+        private void buttonExportReport_Click(object sender, EventArgs e)
+        {
+            if (ComparisionData == null || ComparisionData.Count == 0)
+            {
+                MessageBox.Show("No comparison data to export.", "Export Report", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (var dlg = new SaveFileDialog())
+            {
+                dlg.Title  = "Export Comparison Report";
+                dlg.Filter = "HTML Report (*.html)|*.html|Excel Workbook (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+                dlg.FileName = $"CRM_Comparison_Report_{DateTime.Now:yyyyMMdd_HHmmss}";
+
+                if (dlg.ShowDialog() != DialogResult.OK) return;
+
+                try
+                {
+                    var ext = System.IO.Path.GetExtension(dlg.FileName).ToLower();
+                    if (ext == ".xlsx")
+                        ReportExporter.ExportXlsx(ComparisionData, dlg.FileName);
+                    else
+                        ReportExporter.ExportHtml(ComparisionData, dlg.FileName);
+
+                    if (MessageBox.Show(
+                            $"Report saved to:\n{dlg.FileName}\n\nOpen the file now?",
+                            "Export Report", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(dlg.FileName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to export report:\n{ex.Message}", "Export Report", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }

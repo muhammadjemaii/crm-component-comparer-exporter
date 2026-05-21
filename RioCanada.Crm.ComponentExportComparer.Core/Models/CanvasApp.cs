@@ -39,6 +39,9 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             if (!patterns.Any(x => !string.IsNullOrWhiteSpace(x)))
                 return new List<CanvasApp>();
 
+            // Query with only the primary key and name — these are the only attributes
+            // guaranteed to be present on every canvasapp subtype including Custom Pages.
+            // All other attributes must be hydrated individually via RetrieveSafe.
             QueryExpression query = new QueryExpression(EntityLogicalName)
             {
                 Distinct = true,
@@ -48,7 +51,82 @@ namespace RioCanada.Crm.ComponentExportComparer.Core.Models
             Utilities.Helper.ApplyPatternFilter(query, "name", patterns);
             Utilities.Helper.ApplySolutionFilter(query, EntityLogicalName + "id", solutionIds);
 
-            return service.GetBigData<CanvasApp>(query);
+            var apps = service.GetBigData<CanvasApp>(query);
+
+            // Per-record hydration — RetrieveSafe returns null silently for Custom Pages
+            // that don't expose the requested attributes, so the rest of the batch continues.
+            var optionalColumns = new ColumnSet(
+                "ismanaged", "componentstate", "statecode", "statuscode",
+                "solutionid", "createdon", "modifiedon",
+                "uniquename", "appversion", "introducedversion", "description",
+                "publishedon", "currentversiondefinition", "contenturi",
+                "createdby", "modifiedby");
+
+            foreach (var app in apps)
+            {
+                var extra = service.RetrieveSafe(EntityLogicalName, app.Id, optionalColumns);
+                if (extra == null) continue;
+                foreach (var attr in extra.Attributes)
+                {
+                    if (!app.Contains(attr.Key))
+                        app[attr.Key] = attr.Value;
+                }
+            }
+
+            return apps;
+        }
+
+        /// <summary>
+        /// Safely retrieves a single optional attribute from a canvasapp record.
+        /// Returns default(T) without throwing if the attribute is absent on this record subtype.
+        /// </summary>
+        internal static T TryGetAttribute<T>(OrganizationService service, Guid id, string attributeName)
+        {
+            // Use RetrieveSafe to bypass the retry/dialog handler; returns null on any error
+            // (e.g. attribute absent on Custom Page subtype).
+            var entity = service.RetrieveSafe(EntityLogicalName, id, new ColumnSet(attributeName));
+            if (entity != null && entity.Contains(attributeName))
+                return (T)entity[attributeName];
+            return default(T);
+        }
+
+        /// <summary>
+        /// Returns the contenturi for a specific canvas app, or null if unavailable.
+        /// </summary>
+        public static string TryGetContentUri(OrganizationService service, Guid canvasAppId)
+        {
+            return TryGetAttribute<string>(service, canvasAppId, "contenturi");
+        }
+
+        /// <summary>
+        /// Downloads the .msapp binary from the ContentUri using a Bearer token obtained from the service.
+        /// Returns null if ContentUri is unavailable or the download fails.
+        /// </summary>
+        public byte[] DownloadMsapp(OrganizationService service)
+        {
+            // Lazily resolve the ContentUri if not already set
+            if (string.IsNullOrWhiteSpace(this.ContentUri))
+            {
+                var uri = TryGetContentUri(service, this.Id);
+                if (string.IsNullOrWhiteSpace(uri))
+                    return null;
+                this.ContentUri = uri;
+            }
+
+            var token = service.GetAccessToken();
+            if (string.IsNullOrWhiteSpace(token))
+                return null;
+
+            using (var client = new System.Net.Http.HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                client.Timeout = TimeSpan.FromMinutes(5);
+
+                var response = client.GetAsync(this.ContentUri).GetAwaiter().GetResult();
+                response.EnsureSuccessStatusCode();
+                return response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
+            }
         }
 
         public object GetMetadataObject(bool includeAllProperty)

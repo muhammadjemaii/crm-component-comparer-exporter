@@ -140,6 +140,7 @@
       <DependentUpon>ImageCheckbox.cs</DependentUpon>
     </Compile>
     <Compile Include="Comparision\Models.cs" />
+    <Compile Include="Comparision\ReportExporter.cs" />
     <Compile Include="CustomMultipleConnectionsPluginControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>

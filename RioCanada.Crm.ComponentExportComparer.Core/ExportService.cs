@@ -77,6 +77,11 @@ namespace RioCanada.Crm.ComponentExportComparer.Core
             return Solution.GetSolutionLookup(service);
         }
 
+        public static List<string> GetCustomSolutions(OrganizationService service)
+        {
+            return Solution.GetCustomSolutions(service);
+        }
+
         public static IndexLineItem GetIndexData(string filePath)
         {
             try
